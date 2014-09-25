@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--[if lt IE 8]> <html class="lt-ie10 lt-ie9 lt-ie8" lang="<?= $culture ?>"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie10 lt-ie9" lang="<?= $culture ?>"> <![endif]-->
+<!--[if IE 9]>    <html class="lt-ie10" lang="<?= $culture ?>"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="{{culture}}"><!--<![endif]-->
+{{>head}}
+<body class="format-{{ad.format}}">
+	<form method="post" action="" enctype="multipart/form-data" autocomplete="off" class="form">
+		<section class="app-content">
+			{{>ad-window}}
+		</section>
+		{{>interactivities-toolbar}}
+		{{>layers-sidebar}}
+	</form>
+	
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script>window.jQuery || document.write('<script src="{{path.scripts}}jquery-1.11.1.min.js"> \x3C/script>')</script>
+	<script src="{{path.scripts}}plugins.min.js"></script>
+	<script src="{{path.scripts}}ads.min.js"></script>
+	<script src="{{path.scripts}}global.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			var app = {
+				culture: "{{culture}}",
+				settings: {
+					interactivities: [{{#settings.interactivities}}"{{.}}",{{/settings.interactivities}}]
+				}
+			}
+
+			var ad = {
+				format: {
+					w: {{ad.w}},
+					h: {{ad.h}},
+					text: "{{ad.w}}x{{ad.h}}"
+				}
+			}
+
+        	_g = new gen(app, "{{path.root}}", ad);
+        });
+	</script>
+</body>
+</html>

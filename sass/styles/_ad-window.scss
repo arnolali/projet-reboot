@@ -1,0 +1,103 @@
+/*------------------------------------*\
+    #Ad Window
+\*------------------------------------*/
+
+.ad-window {
+	position: relative;
+	top: 50%;
+	background-color: $dark-grey;
+	font-family: helvetica, arial, sans-serif;
+	font-size:   12px;
+	padding: 16px;
+	margin: 0 auto;
+	@include box-shadow(0 0 10px 5px rgba(0,0,0,.5));
+	@include transform(translateY(-50%));
+
+	&.focus { @include box-shadow(0 15px 50px 10px rgba(0,0,0,.5)); }
+
+}
+
+.format-980x670 .ad-window {
+	width:  980px;
+	height: 670px;
+}
+
+.format-480x670 .ad-window {
+	width:  480px;
+	height: 670px;
+}
+
+.format-480x325 .ad-window {
+	width:  480px;
+	height: 325px;
+}
+
+.format-230x670 .ad-window {
+	width:  230px;
+	height: 670px;
+}
+
+.format-480x210 .ad-window {
+	width:  480px;
+	height: 210px;
+}
+
+.format-480x152 .ad-window {
+	width:  480px;
+	height: 152px;
+}
+
+.format-230x325 .ad-window {
+	width:  230px;
+	height: 325px;
+}
+
+.format-980x70 .ad-window {
+	width:  230px;
+	height: 325px;
+}
+
+.format-700x450 .ad-window {
+	width:  230px;
+	height: 325px;
+}
+
+.ad-window__ruler--horizontal {
+	position: absolute;
+	top:  0;
+	left: 16px;
+	width:  calc(100% - 32px);
+	height: 16px;
+	background-image:  url(../images/ruler-horizontal.png);
+	background-repeat: repeat-x;
+}
+
+.ad-window__ruler--vertical {
+	position: absolute;
+	top:  16px;
+	left: 0;
+	width:  16px;
+	height: calc(100% - 32px);
+	background-image:  url(../images/ruler-vertical.png);
+	background-repeat: repeat-y;
+}
+
+.ad-window__ruler__corner {
+	position: absolute;
+	top:  0;
+	left: 0;
+	width:  16px;
+	height: 16px;
+	background: url(../images/ruler-corner.png) 50% 50% no-repeat;
+}
+
+
+.ad-window__content {
+	position: absolute;
+	top:  16px;
+	left: 16px;
+	width:  calc(100% - 32px);
+	height: calc(100% - 32px);
+	background-image:  url(../images/ad-window-tile.png);
+	background-repeat: repeat;
+}

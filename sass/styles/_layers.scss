@@ -1,0 +1,181 @@
+/*------------------------------------*\
+    #Layers
+\*------------------------------------*/
+
+
+/**
+ * Extend `.sidebar {}` in _sidebar.scss.
+ */
+.layers {
+	right: 0;
+	color: $white;
+	font-size: .8rem;
+
+	input {
+		background-color: $dark-grey;
+		border: none;
+		color: $white;
+		padding: 2px;
+		outline: none;
+
+		&.percent {
+			background-image: url(../images/input-percent.png);
+			background-repeat: no-repeat;
+			background-position: 23px 50%;
+		}
+
+		&:focus {
+			background-color: $white;
+			background-image: url(../images/input-percent-white.png);
+			color: $black;
+		}
+	}
+}
+
+.layers__basic-opt {
+	position: absolute;
+	top:  0;
+	left: 0;
+	width:  100%;
+	height: 30px;
+	line-height: 30px;
+	@include box-sizing(border-box);
+	border: solid 1px $dark-grey;
+	padding: 0 5px;
+	z-index: 1;
+}
+
+.layers__lock {
+	position: relative;
+	float: left;
+	width:  50%;
+	height: 30px;
+
+	.label {
+		position: relative;
+		display: inline-block;
+		@include user-select(none);
+	}
+
+	.lock-icon {
+		position: relative;
+		display: inline-block;
+		width:  20px;
+		height: 22px;
+		background-image:    url(../images/icons/lock-sprite.png);
+		background-position: 0 0;
+		background-repeat:   no-repeat;
+		vertical-align: middle;
+		cursor: pointer;
+
+		&:hover { background-position: 0 -22px; }
+		&.active { background-position: 0 -44px; }
+	}
+}
+
+.layers__opacity {
+	position: relative;
+	float: right;
+	width:  50%;
+	height: 30px;
+	text-align: right;
+
+	.label {
+		position: relative;
+		display: inline-block;
+		@include user-select(none);
+	}
+	
+	input {
+		vertical-align: middle;
+	}
+}
+
+.layers__list {
+	position: absolute;
+	top:  0;
+	left: 0;
+	width:  100%;
+	height: 100%;
+	@include box-sizing(border-box);
+	border-right: solid 1px $dark-grey;
+	padding: 30px 0 0 0;
+	z-index: 0;
+}
+
+.layer {
+	position: relative;
+	float: left;
+	width:  100%;
+	height: 40px;
+	background-color: $light-grey;
+	@include box-sizing(border-box);
+	border: solid 1px $dark-grey;
+	cursor: pointer;
+
+	&.focus { background-color: $focus-grey; }
+	&.locked {
+		background-image:    url(../images/icons/lock.png);
+		background-position: calc(100% - 5px) 50%;
+		background-repeat:   no-repeat;
+	}
+}
+
+.layer__visibility {
+	position: absolute;
+	top:  0;
+	left: 0;
+	width:  30px;
+	height: 100%;
+	background-color:    $light-grey;
+	background-image:    url(../images/icons/visibility-visible.png);
+	background-position: 50% 50%;
+	background-repeat:   no-repeat;
+	background-size:     12px 12px;
+	border-right: solid 1px $dark-grey;
+	z-index: 1;
+	cursor: pointer;
+}
+
+.layer--invisible {
+	.layer__visibility {
+		background-image: url(../images/icons/visibility-hidden.png);
+	}
+}
+
+.layer__infos {
+	position: absolute;
+	top:  0;
+	left: 0;
+	width:  100%;
+	height: 100%;
+	@include box-sizing(border-box);
+	padding: 0 0 0 30px;
+	z-index: 0;
+}
+
+.layer__preview {
+	position: absolute;
+	top:  3px;
+	left: 34px;
+	width:  30px;
+	height: 30px;
+	background-image:  url('../images/ad-window-tile.png');
+	background-repeat: repeat;
+	background-size:   8px 8px;
+	border: solid 1px $black;
+	z-index: 1;
+}
+
+.layer__name {
+	position: relative;
+	float: left;
+	width:  100%;
+	height: 100%;
+	line-height: 40px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	@include box-sizing(border-box);
+	padding: 0 20px 0 45px;
+	z-index: 0;
+}

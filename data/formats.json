@@ -1,0 +1,56 @@
+[
+	{
+		"id": "screen",
+		"category": "dominant",
+		"w": 980,
+		"h": 670
+	},
+	{
+		"id": "half",
+		"category": "dominant",
+        "w": 480,
+        "h": 670
+	},
+	{
+		"id": "quarterh",
+		"category": "presence",
+		"w": 480,
+        "h": 325
+	},
+	{
+		"id": "quarterv",
+		"category": "presence",
+        "w": 230,
+        "h": 670
+	},
+	{
+		"id": "sixthh",
+		"category": "presence",
+        "w": 480,
+        "h": 210
+	},
+	{
+		"id": "eighthh",
+		"category": "presence",
+        "w": 480,
+        "h": 152
+	},
+	{
+		"id": "eighthv",
+		"category": "presence",
+		"w": 230,
+        "h": 325
+	},
+	{
+		"id": "banner",
+		"category": "premium",
+		"w": 980,
+        "h": 70
+	},
+	{
+		"id": "demo",
+		"category": "others",
+		"w": 700,
+        "h": 450
+	}
+]
