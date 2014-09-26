@@ -160,9 +160,10 @@
 	left: 34px;
 	width:  30px;
 	height: 30px;
-	background-image:  url('../images/ad-window-tile.png');
-	background-repeat: repeat;
-	background-size:   8px 8px;
+	background-image:  url(), url('../images/ad-window-tile.png');
+	background-repeat: no-repeat, repeat;
+	background-position: 0 0, 50% 50%
+	background-size:   cover, 8px 8px;
 	border: solid 1px $black;
 	z-index: 1;
 }

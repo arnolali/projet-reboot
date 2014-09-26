@@ -28,6 +28,28 @@ function uniqueId() {
     return Math.round( new Date().getTime() + ( Math.random() * 100 ) );
 };
 
+function getImgFromInput(input, callback) {
+    if(inputContainImg( input )) {
+        var file = input.prop("files")[0];
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            $("<img/>").attr("src", e.target.result).load(function() {
+                var img = {
+                    width: this.width,
+                    height: this.height,
+                    base64: e.target.result
+                }
+                callback( img );
+            });
+        }
+        reader.readAsDataURL(file);
+    } else {
+        callback( false );
+    }
+};
+
+
 function inputContainImg(input) {
     var file = input[0].files[0];
     var type = file.type;

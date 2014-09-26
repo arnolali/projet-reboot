@@ -17,6 +17,7 @@ gen = function(defaultApp, root, defaultAd) {
   self.app = {
     templates: {},
     idPer: {},
+    dragover: false,
     keyPressed: {
       ctrl: false
     }
@@ -28,7 +29,7 @@ gen = function(defaultApp, root, defaultAd) {
   }
   $.extend(self.ad, defaultAd);
 
-  $.when( //Télécharge tous les json externes nécessaires
+  $.when( // Télécharge tous les json externes nécessaires
     $.getJSON( self.path.data + self.app.culture + "/text.json", function(r) { self.text = r; } ),
     $.get( self.path.templates + "_interactivities/basic.mustache", function(r) { self.app.templates.basic = r; } ),
     $.get( self.path.templates + "_partials/layer.mustache", function(r) { self.app.templates.layer = r; } )
@@ -44,6 +45,7 @@ gen = function(defaultApp, root, defaultAd) {
 gen.prototype.map_ = function() {
   var self = this;
   self.dom = {
+    b: $('body'),
     adContent: $('.ad-window__content'),
     interactivitiesToolbar: $('.interactivities-toolbar'),
     layers: $('.layers__list'),
@@ -75,6 +77,17 @@ gen.prototype.bindEvents_ = function() {
     self.updateKeyPressed_();
   });
 
+  $(document).on('dragover', function(e) {
+    clearTimeout(window.timer);
+    self.detectDragOver_( true );
+  });
+
+  $(document).on('dragleave drop', function(e) {
+    window.timer = setTimeout(function() {
+      self.detectDragOver_( false );
+    }, 200)
+  });
+
   self.dom.interactivitiesToolbar.on('click', '.js-create-ad-elem', function() {
     self.createElem_( $(this) );
   });
@@ -99,6 +112,22 @@ gen.prototype.bindEvents_ = function() {
   self.dom.opacity.on('change', function() {
     self.updateElemOpacity_();
   });
+
+  self.dom.adContent.on('change', '.js-dropzone', function() {
+    self.getImgFormInput_( $(this) );
+  });
+};
+
+/*=== Detect Drag over App ==========================================*/
+gen.prototype.detectDragOver_ = function( e ) {
+  var self = this;
+  if(e) {
+    self.app.dragover = true;
+    self.dom.b.addClass('dragover');
+  } else {
+    self.app.dragover = false;
+    self.dom.b.removeClass('dragover');
+  }
 };
 
 /*=== Init Layer Sortable ==========================================*/
@@ -131,7 +160,7 @@ gen.prototype.initInteractivitiesRelated_ = function() {
 };
 
 /*=== Get Interactivity Template ==========================================*/
-gen.prototype.getInteractivityTemplate_ = function(interactivity) {
+gen.prototype.getInteractivityTemplate_ = function( interactivity ) {
   var self = this;
   $.get( self.path.templates + "_interactivities/" + interactivity + ".mustache", function(r) { 
     self.app.templates[interactivity] = r; 
@@ -139,7 +168,7 @@ gen.prototype.getInteractivityTemplate_ = function(interactivity) {
 };
 
 /*=== Init Id Per Interactivity ==========================================*/
-gen.prototype.initIdPerInteractivity_ = function(interactivity) {
+gen.prototype.initIdPerInteractivity_ = function( interactivity ) {
   var self = this;
   self.app.idPer[interactivity] = 0;
 };
@@ -203,6 +232,9 @@ gen.prototype.setAdElemHtml_ = function( obj ) {
   var self = this;
   var template = Mustache.render( self.app.templates.basic, obj );
   var html = $(template).append( self.app.templates[obj.instance] );
+  if( html.find('.js-dropzone') ) {
+    html.addClass('can-drop');
+  }
   
   self.dom.adContent.append( html );
   obj.dom.elem = self.dom.adContent.find('[data-obj="' + obj.id + '"]');
@@ -241,7 +273,10 @@ gen.prototype.initLayerDrag_ = function( obj ) {
   var self = this;
   obj.dom.layer.draggable({
     connectToSortable: self.dom.layers,
-    containment: "parent"
+    containment: "parent",
+    stop: function() {
+      self.setFocus_( obj );
+    }
   });
   self.dom.layers.sortable( "refresh" );
 };
@@ -281,8 +316,8 @@ gen.prototype.setFocus_ = function( obj ) {
 
   if( obj ) {
     self.app.focusedObj = obj;
-    console.log(obj.dom.layer);
     obj.dom.elem.addClass('focus');
+    obj.dom.layer = $('.layer[data-obj="'+ obj.id +'"]')
     obj.dom.layer.addClass('focus');
   } else {
     self.app.focusedObj = null
@@ -350,6 +385,57 @@ gen.prototype.updateOpacityValue_ = function() {
     var opacity = self.app.focusedObj.style.opacity * 100;
     self.dom.opacity.val( opacity );
   }
+};
+
+/*=== Update Background-image on Elem =============================*/
+gen.prototype.getImgFormInput_ = function( input ) {
+  var self = this;
+  getImgFromInput( input, function( img ) {
+    self.updateObjImg_( input, img );
+  });
+};
+
+gen.prototype.updateObjImg_ = function( input, img ) {
+  var self = this;
+  var elem = input.closest('[data-obj]');
+  var obj = self.getObjByProp_( elem.data('obj') );
+
+  self.updateObjStyle_( obj, {
+    'width':  img.width,
+    'height': img.height,
+    'backgroundImage': img.base64
+  });
+
+  self.updateElemImg_( obj );
+  self.updateLayerImg_( obj );
+};
+
+gen.prototype.updateElemImg_ = function( obj ) {
+  var self = this;
+  var bg = obj.dom.elem.find('.ad-elem__bg');
+  var name = obj.dom.elem.find('.ad-elem__bg__name');
+  var input = obj.dom.elem.find('.js-dropzone');
+
+  obj.dom.elem.css({
+    'width':  obj.style.width,
+    'height': obj.style.height
+  }).removeClass('can-drop');
+
+  bg.css({
+    'background-color': 'none',
+    'background-image': 'url("' + obj.style.backgroundImage + '")'
+  });
+
+  name.remove();
+};
+
+gen.prototype.updateLayerImg_ = function( obj ) {
+  var self = this;
+  var preview = obj.dom.layer.find('.layer__preview');
+
+  preview.css({
+    'background-image': 'url("' + obj.style.backgroundImage + '"), url("' + self.path.images + 'ad-window-tile.png")'
+  });
 };
 
 gen.prototype.updateObjStyle_ = function( obj, style ) {
