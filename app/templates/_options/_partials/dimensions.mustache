@@ -1,0 +1,28 @@
+<div class="dimensions row table">
+	<div class="table-cell">
+		<span class="label">{{text.width}}:</span> 
+		<input 
+			type="number" 
+			{{#elem.settings.min.width}}min="{{elem.settings.min.width}}"{{/elem.settings.min.width}} 
+			{{#elem.settings.max.width}}max="{{elem.settings.max.width}}"{{/elem.settings.max.width}} 
+			class="[ input-dark pixel ] js-update-elem-style" 
+			data-prop="width" 
+			{{#elem.settings.linked.dimensions}}data-linked="height"{{/elem.settings.linked.dimensions}}
+			value="{{elem.style.width}}"
+			{{#elem.settings.readonly.dimensions}}readonly{{/elem.settings.readonly.dimensions}}
+		>
+	</div>
+	<div class="table-cell">
+		<span class="label">{{text.height}}:</span>
+		<input 
+			type="number" 
+			{{#elem.settings.min.height}}min="{{elem.settings.min.height}}"{{/elem.settings.min.height}} 
+			{{#elem.settings.max.height}}max="{{elem.settings.max.height}}"{{/elem.settings.max.height}} 
+			class="[ input-dark pixel ] js-update-elem-style" 
+			data-prop="height" 
+			{{#elem.settings.linked.dimensions}}data-linked="width"{{/elem.settings.linked.dimensions}}
+			value="{{elem.style.height}}" 
+			{{#elem.settings.readonly.dimensions}}readonly{{/elem.settings.readonly.dimensions}}
+		>
+	</div>
+</div>

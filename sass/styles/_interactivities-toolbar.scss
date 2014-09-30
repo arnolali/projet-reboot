@@ -11,27 +11,32 @@
 	background-color: $medium-grey;
 	@include box-sizing(border-box);
 	padding: 10px 0;
-}
 
-.icon {
-	position: relative;
-	float: left;
-	width:  34px;
-	height: 24px;
-	background-repeat:   no-repeat;
-	background-position: 50% 50%;
-	text-indent: -9999px;
-	margin: 0 2px;
-	border: solid 1px $medium-grey;
-	cursor: pointer;
+	.icon {
+		position: relative;
+		float: left;
+		width:  34px;
+		height: 24px;
+		background-repeat:   no-repeat;
+		background-position: 50% 50%;
+		text-indent: -9999px;
+		margin: 0 2px;
+		border: solid 1px $medium-grey;
+		cursor: pointer;
 
-	&:hover {
-		background-color: $light-grey;
-		border: solid 1px $dark-grey;
+		&:hover {
+			background-color: $light-grey;
+			border: solid 1px $dark-grey;
+		}
 	}
-}
 
-.icon--image {
-	@extend .icon;
-	background-image: url(../images/icons/image.png);
+	.icon--image {
+		@extend .icon;
+		background-image: url(../images/icons/toolbar/image.png);
+	}
+
+	.icon--link {
+		@extend .icon;
+		background-image: url(../images/icons/toolbar/link.png);
+	}
 }

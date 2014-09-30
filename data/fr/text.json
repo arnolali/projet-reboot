@@ -1,7 +1,14 @@
 {
+	"cta": {
+		"image": "Glisser votre image ici",
+		"link": "Lien"
+	},
+	"height": "Hauteur",
 	"home": "Accueil",
 	"image": "Image",
+	"link": "Lien",
 	"lock": "Verrou",
 	"opacity": "Opacité",
-	"site-name": "Générateur"
+	"site-name": "Générateur",
+	"width": "Largeur"
 }

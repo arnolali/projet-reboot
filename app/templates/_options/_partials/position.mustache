@@ -1,0 +1,24 @@
+<div class="position row table">
+	<div class="table-cell">
+		<span class="label">x:</span>
+		<input 
+			type="number" 
+			{{#elem.settings.min.left}}min="{{elem.settings.min.left}}"{{/elem.settings.min.left}} 
+			{{#elem.settings.max.left}}min="{{elem.settings.max.left}}"{{/elem.settings.max.left}} 
+			class="[ input-dark pixel ] js-update-elem-style" 
+			data-prop="left" 
+			value="{{elem.style.left}}"
+		>
+	</div>
+	<div class="table-cell">
+		<span class="label">y:</span>
+		<input 
+			type="number" 
+			{{#elem.settings.min.top}}min="{{elem.settings.min.top}}"{{/elem.settings.min.top}} 
+			{{#elem.settings.max.top}}min="{{elem.settings.max.top}}"{{/elem.settings.max.top}} 
+			class="[ input-dark pixel ] js-update-elem-style" 
+			data-prop="top" 
+			value="{{elem.style.top}}"
+		>
+	</div>
+</div>

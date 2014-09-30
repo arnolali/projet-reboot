@@ -1,0 +1,25 @@
+{
+	"settings": {
+		"color": {
+			"hex":  "#B10DC9",
+			"rgba": "rgba(177,13,201,.5)"
+		},
+		"min": {
+			"width":  40,
+			"height": 40
+		},
+		"linked": {
+			"dimensions": true
+		},
+		"default": {
+			"layerPreview": "public/images/icons/link-light.svg"
+		},
+		"theme": "light",
+		"class": "theme-light",
+		"url": ""
+	},
+	"style": {
+		"width":  40,
+		"height": 40
+	}
+}

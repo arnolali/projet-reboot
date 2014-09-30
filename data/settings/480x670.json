@@ -1,5 +1,6 @@
 {
 	"interactivities": [
-		"image"
+		"image",
+		"link"
 	]
 }

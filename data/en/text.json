@@ -1,7 +1,14 @@
 {
+	"cta": {
+		"image": "Drop your image here",
+		"link": "Link"
+	},
+	"height": "Height",
 	"home": "Home",
 	"image": "Image",
+	"link": "Link",
 	"lock": "Lock",
 	"opacity": "Opacity",
-	"site-name": "Generator"
+	"site-name": "Generator",
+	"width": "Width"
 }

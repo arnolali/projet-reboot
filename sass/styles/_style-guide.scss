@@ -8,6 +8,72 @@ html {
 	font-size:   16px;
 }
 
+.table { display: table; }
+
+.table-cell { 
+	display: table-cell; 
+	vertical-align: middle;
+}
+
+.centered { text-align: center; }
+
+.disabled,
+input:read-only {
+	opacity: .5;
+	pointer-events: none;
+	cursor: default;
+	@include user-select(none);
+}
+
+.label {
+	cursor: default;
+	@include user-select(none);
+}
+
+input {
+	&::-webkit-outer-spin-button,
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+	}
+
+	&.text { width: 193px; }
+
+	&.pixel,
+	&.percent {
+		width: 45px;
+		background-position: 50px 70%;
+		background-repeat:   no-repeat;
+		text-align: right;
+		padding-right: 20px;
+	}
+}
+
+.input-dark {
+	background-color: $dark-grey;
+	border: none;
+	color: $white;
+	padding: 2px;
+	outline: none;
+	vertical-align: middle;
+
+	&.percent {
+		background-image: url(../images/input-percent.png);
+
+		&:focus { background-image: url(../images/input-percent-white.png); }
+	}
+
+	&.pixel {
+		background-image: url(../images/input-pixel.png);
+
+		&:focus { background-image: url(../images/input-pixel-white.png); }
+	}
+
+	&:focus {
+		background-color: $white;
+		color: $black;
+	}
+}
+
 .form {
 	position: absolute;
 	top:  0;
@@ -16,4 +82,11 @@ html {
 	height: 100%;
 	margin:  0;
 	padding: 0;
+	overflow: hidden;
+}
+
+.dragover {
+	.can-drop {
+		outline: solid 5px $focus-grey;
+	}
 }
