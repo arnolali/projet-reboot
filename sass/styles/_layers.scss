@@ -91,9 +91,40 @@
 	&.focus { background-color: $focus-grey; }
 	&.locked {
 		background-image:    url(../images/icons/lock.png);
-		background-position: calc(100% - 5px) 50%;
+		background-position: calc(100% - 5px) 15px;
 		background-repeat:   no-repeat;
 	}
+	&.locked-parent {
+		background-image:    url(../images/icons/lock-parent.png);
+		background-position: calc(100% - 5px) 15px;
+		background-repeat:   no-repeat;
+	}
+
+	> ol {
+		position: relative;
+		float: right;
+		width: calc(100% - 3px);
+		background-color: $white;
+		list-style: none;
+		border-left: solid 3px $dark-grey;
+		margin:  0;
+		padding: 0;
+	}
+
+	&.no-children {
+		> ol {
+			display: none;
+		}
+	}
+}
+
+.layer__placeholder {
+	position: relative;
+	float: left;
+	width: 100%;
+	height: 3px;
+	@include box-sizing(border-box);
+	border: solid 1px $white;
 }
 
 .layer__wrapper {
@@ -123,8 +154,8 @@
 }
 
 .layer--invisible {
-	.layer__visibility {
-		background-image: url(../images/icons/visibility-hidden.png);
+	&>.layer__wrapper {
+		.layer__visibility { background-image: url(../images/icons/visibility-hidden.png); }
 	}
 }
 
@@ -166,13 +197,3 @@
 	z-index: 0;
 }
 
-.layer > ol,
-.layer__sublist {
-	position: relative;
-	float: right;
-	width: calc(100% - 3px);
-	list-style: none;
-	border-left: solid 3px $dark-grey;
-	margin:  0;
-	padding: 0;
-}

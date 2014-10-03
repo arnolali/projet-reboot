@@ -308,8 +308,37 @@ input.pixel, input.percent {
 }
 .layer.locked {
   background-image: url(../images/icons/lock.png);
-  background-position: calc(100% - 5px) 50%;
+  background-position: calc(100% - 5px) 15px;
   background-repeat: no-repeat;
+}
+.layer.locked-parent {
+  background-image: url(../images/icons/lock-parent.png);
+  background-position: calc(100% - 5px) 15px;
+  background-repeat: no-repeat;
+}
+.layer > ol {
+  position: relative;
+  float: right;
+  width: calc(100% - 3px);
+  background-color: white;
+  list-style: none;
+  border-left: solid 3px #282828;
+  margin: 0;
+  padding: 0;
+}
+.layer.no-children > ol {
+  display: none;
+}
+
+.layer__placeholder {
+  position: relative;
+  float: left;
+  width: 100%;
+  height: 3px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border: solid 1px white;
 }
 
 .layer__wrapper {
@@ -340,7 +369,7 @@ input.pixel, input.percent {
   cursor: pointer;
 }
 
-.layer--invisible .layer__visibility {
+.layer--invisible > .layer__wrapper .layer__visibility {
   background-image: url(../images/icons/visibility-hidden.png);
 }
 
@@ -386,17 +415,6 @@ input.pixel, input.percent {
   z-index: 0;
 }
 
-.layer > ol,
-.layer__sublist {
-  position: relative;
-  float: right;
-  width: calc(100% - 3px);
-  list-style: none;
-  border-left: solid 3px #282828;
-  margin: 0;
-  padding: 0;
-}
-
 /*------------------------------------*\
     #Interactivities toolbar
 \*------------------------------------*/
@@ -412,7 +430,7 @@ input.pixel, input.percent {
   box-sizing: border-box;
   padding: 10px 0;
 }
-.interactivities-toolbar .icon, .interactivities-toolbar .icon--image, .interactivities-toolbar .icon--link {
+.interactivities-toolbar .icon, .interactivities-toolbar .icon--image, .interactivities-toolbar .icon--link, .interactivities-toolbar .icon--gallery {
   position: relative;
   float: left;
   width: 34px;
@@ -424,7 +442,7 @@ input.pixel, input.percent {
   border: solid 1px #464646;
   cursor: pointer;
 }
-.interactivities-toolbar .icon:hover, .interactivities-toolbar .icon--image:hover, .interactivities-toolbar .icon--link:hover {
+.interactivities-toolbar .icon:hover, .interactivities-toolbar .icon--image:hover, .interactivities-toolbar .icon--link:hover, .interactivities-toolbar .icon--gallery:hover {
   background-color: #535353;
   border: solid 1px #282828;
 }
@@ -433,6 +451,9 @@ input.pixel, input.percent {
 }
 .interactivities-toolbar .icon--link {
   background-image: url(../images/icons/toolbar/link.png);
+}
+.interactivities-toolbar .icon--gallery {
+  background-image: url(../images/icons/toolbar/gallery.png);
 }
 
 /*------------------------------------*\
@@ -571,22 +592,22 @@ input.pixel, input.percent {
   transition: width 0.3s linear, height 0.3s linear;
 }
 
-.ad-elem--link.theme-light .ad-elem__bg {
+.ad-elem--link.theme-light > .ad-elem__bg {
   background-color: transparent !important;
   background-image: url(../images/icons/link-light.svg);
   background-size: cover;
   background-position: 50% 50%;
 }
-.ad-elem--link.theme-light .ad-elem__bg .ad-elem__bg__name {
+.ad-elem--link.theme-light > .ad-elem__bg .ad-elem__bg__name {
   display: none;
 }
-.ad-elem--link.theme-dark .ad-elem__bg {
+.ad-elem--link.theme-dark > .ad-elem__bg {
   background-color: transparent !important;
   background-image: url(../images/icons/link-dark.svg);
   background-size: cover;
   background-position: 50% 50%;
 }
-.ad-elem--link.theme-dark .ad-elem__bg .ad-elem__bg__name {
+.ad-elem--link.theme-dark > .ad-elem__bg .ad-elem__bg__name {
   display: none;
 }
 
@@ -679,7 +700,7 @@ input.pixel, input.percent {
   padding: 5px;
   border-bottom: solid 1px #282828;
 }
-.elem-options .icon, .elem-options .interactivities-toolbar .icon--image, .interactivities-toolbar .elem-options .icon--image, .elem-options .interactivities-toolbar .icon--link, .interactivities-toolbar .elem-options .icon--link {
+.elem-options .icon, .elem-options .interactivities-toolbar .icon--image, .interactivities-toolbar .elem-options .icon--image, .elem-options .interactivities-toolbar .icon--link, .interactivities-toolbar .elem-options .icon--link, .elem-options .interactivities-toolbar .icon--gallery, .interactivities-toolbar .elem-options .icon--gallery {
   display: inline-block;
   position: relative;
   width: 40px;
@@ -689,10 +710,10 @@ input.pixel, input.percent {
   background-size: contain;
   cursor: pointer;
 }
-.elem-options .link-options .icon, .elem-options .link-options .interactivities-toolbar .icon--image, .interactivities-toolbar .elem-options .link-options .icon--image, .elem-options .link-options .interactivities-toolbar .icon--link, .interactivities-toolbar .elem-options .link-options .icon--link {
+.elem-options .link-options .icon, .elem-options .link-options .interactivities-toolbar .icon--image, .interactivities-toolbar .elem-options .link-options .icon--image, .elem-options .link-options .interactivities-toolbar .icon--link, .interactivities-toolbar .elem-options .link-options .icon--link, .elem-options .link-options .interactivities-toolbar .icon--gallery, .interactivities-toolbar .elem-options .link-options .icon--gallery {
   border: solid 3px #282828;
 }
-.elem-options .link-options .icon.selected, .elem-options .link-options .interactivities-toolbar .selected.icon--image, .interactivities-toolbar .elem-options .link-options .selected.icon--image, .elem-options .link-options .interactivities-toolbar .selected.icon--link, .interactivities-toolbar .elem-options .link-options .selected.icon--link {
+.elem-options .link-options .icon.selected, .elem-options .link-options .interactivities-toolbar .selected.icon--image, .interactivities-toolbar .elem-options .link-options .selected.icon--image, .elem-options .link-options .interactivities-toolbar .selected.icon--link, .interactivities-toolbar .elem-options .link-options .selected.icon--link, .elem-options .link-options .interactivities-toolbar .selected.icon--gallery, .interactivities-toolbar .elem-options .link-options .selected.icon--gallery {
   border: solid 3px #6e7d91;
 }
 .elem-options .link-options .theme-light {

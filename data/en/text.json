@@ -1,8 +1,10 @@
 {
 	"cta": {
+		"gallery": "Gallery",
 		"image": "Drop your image here",
 		"link": "Link"
 	},
+	"gallery": "Gallery",
 	"height": "Height",
 	"home": "Home",
 	"image": "Image",

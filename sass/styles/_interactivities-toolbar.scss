@@ -39,4 +39,9 @@
 		@extend .icon;
 		background-image: url(../images/icons/toolbar/link.png);
 	}
+
+	.icon--gallery {
+		@extend .icon;
+		background-image: url(../images/icons/toolbar/gallery.png);
+	}
 }

@@ -1,4 +1,4 @@
-//@prepros-append mustache.js
-//@prepros-append jquery-ui.js
-//@prepros-append jquery.mjs.nestedSortable.js
+//@prepros-append libs/mustache.js
+//@prepros-append libs/jquery-ui.js
+//@prepros-append libs/jquery.mjs.nestedSortable.js
 //@prepros-append utilities.js

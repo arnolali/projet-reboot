@@ -1,4 +1,4 @@
-<li class="layer" data-id="{{meta.id}}">
+<li class="layer" data-id="{{meta.id}}" data-type="{{meta.instance}}" data-accept="{{#settings.accept}}{{.}} {{/settings.accept}}">
 	<div class="layer__wrapper">
 		<div class="layer__visibility js-toggle-layer-visibility" style="background-color: {{settings.color.rgba}}"></div>
 		<div class="layer__infos">
@@ -6,5 +6,4 @@
 			<div class="layer__name">{{text.layer}}</div>
 		</div>
 	</div>
-	<ol class="layer__sublist"></ol>
 </li>

@@ -17,7 +17,7 @@
 	@extend .ad-elem;
 
 	&.theme-light {
-		.ad-elem__bg {
+		>.ad-elem__bg {
 			background-color: rgba(0,0,0,0) !important;
 			background-image: url(../images/icons/link-light.svg);
 			background-size: cover;
@@ -30,7 +30,7 @@
 	}
 
 	&.theme-dark {
-		.ad-elem__bg {
+		>.ad-elem__bg {
 			background-color: rgba(0,0,0,0) !important;
 			background-image: url(../images/icons/link-dark.svg);
 			background-size: cover;

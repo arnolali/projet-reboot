@@ -12,7 +12,7 @@ gen = function(defaultApp, root, defaultAd) {
     libs:       root + "app/libraries/",
     templates:  root + 'app/templates/',
     temps:      root + 'temps/'
-  }
+  };
 
   self.app = {
     templates: {
@@ -26,17 +26,17 @@ gen = function(defaultApp, root, defaultAd) {
       ctrl: false
     },
     settings: {}
-  }
+  };
   $.extend(self.app, defaultApp);
 
   self.ad = {
     elems: []
-  }
+  };
   $.extend(self.ad, defaultAd);
 
   self.props = {
     int: ["top", "left", "width", "height", "zIndex"] 
-  }
+  };
 
   $.when( // Télécharge tous les json externes nécessaires
     $.getJSON( self.path.data + self.app.culture + "/text.json", function(r) { self.text = r; } ),
@@ -46,7 +46,7 @@ gen = function(defaultApp, root, defaultAd) {
     $.get( self.path.templates + "/_options/_partials/dimensions.mustache", function(r) { self.app.templates.options.partials.dimensions = r; } )
   ).then(function() { // Ensuite initialise la page
     //--- functions -----------------
-    self.map_(); 
+    self.map_();
     self.init_();
     self.bindEvents_();
   });
@@ -64,7 +64,7 @@ gen.prototype.map_ = function() {
     layers: $('.layers__list'),
     lock: $('.js-lock-elem'),
     opacity: $('.js-opacity-elem'),
-  }
+  };
 };
 
 //=== INIT START =====================================================
@@ -99,7 +99,7 @@ gen.prototype.bindEvents_ = function() {
   $(document).on('dragleave drop', function(e) {
     window.timer = setTimeout(function() {
       self.detectDragOver_( false );
-    }, 200)
+    }, 200);
   });
 
   self.dom.form.on('keypress', function(e) {
@@ -123,7 +123,8 @@ gen.prototype.bindEvents_ = function() {
     self.updateLayerFocus_( $(this) );
   });
 
-  self.dom.lock.on('click', function() {
+  self.dom.lock.on('click', function(e) {
+    e.stopImmediatePropagation();
     self.toggleLockElem_();
   });
 
@@ -148,6 +149,7 @@ gen.prototype.bindEvents_ = function() {
   });
 };
 
+/*=== Set Options Input Value ==========================================*/
 gen.prototype.setOptionsInputValue_ = function( prop ) {
   var self = this;
   var obj = self.app.focusedObj;
@@ -156,6 +158,7 @@ gen.prototype.setOptionsInputValue_ = function( prop ) {
   input.val( obj.style[prop] );
 };
 
+/*=== Update Elem Style ==========================================*/
 gen.prototype.updateElemStyle_ = function( input ) {
   var self = this;
   var options = input.closest('.options');
@@ -164,7 +167,7 @@ gen.prototype.updateElemStyle_ = function( input ) {
   var rawValue = self.forceTypePerProp_( prop, input.val() );
   var value = rawValue.value;
   var unit = rawValue.unit;
-  var obj = self.getObjByProp_( options.data('id') );
+  var obj = self.getObjById_( options.data('id') );
   var style = {};
 
   style[prop] = value;
@@ -172,14 +175,15 @@ gen.prototype.updateElemStyle_ = function( input ) {
   self.updateObjStyle_( obj, style );
   obj.dom.elem.css(prop, (value + unit) );
   if(linked) {
-    self.updateLinked_( obj, linked, value);
+    self.updateLinkedStyle_( obj, linked, value);
   }
 };
 
-gen.prototype.updateLinked_ = function( obj, prop, value ) {
+/*=== Update Linked Style ==========================================*/
+gen.prototype.updateLinkedStyle_ = function( obj, prop, value ) {
   var self = this;
   var rawValue = self.forceTypePerProp_( prop, value );
-  var value = rawValue.value;
+  value = rawValue.value;
   var unit = rawValue.unit;
   var input = obj.dom.options.find( '[data-prop="' + prop + '"]' );
   var style = {};
@@ -193,15 +197,17 @@ gen.prototype.updateLinked_ = function( obj, prop, value ) {
   }
 };
 
+/*=== Update Elem Setting ==========================================*/
 gen.prototype.updateElemSetting_ = function( input ) {
   var self = this;
   var options = input.closest('.options');
   var prop = input.data('prop');
-  var obj = self.getObjByProp_( options.data('id') );
+  var obj = self.getObjById_( options.data('id') );
 
   obj.settings[prop] = input.val();
 };
 
+/*=== Force Type Per Prop ==========================================*/
 gen.prototype.forceTypePerProp_ = function( prop, value ) {
   var self = this;
   var unit = "";
@@ -211,36 +217,6 @@ gen.prototype.forceTypePerProp_ = function( prop, value ) {
     unit = "px";
   }
   return {'value': value, 'unit': unit};
-};
-
-gen.prototype.updateLinkTheme_ = function( icon ) {
-  var self = this;
-  var options = icon.closest('.options');
-  var id = options.data('id');
-  var obj = self.getObjByProp_( id );
-  var parent = icon.closest('.theme-selection');
-  var currentIcon = parent.find('.selected');
-
-  currentIcon.removeClass('selected');
-  icon.addClass('selected');
-
-  obj.dom.elem.removeClass( 'theme-' + obj.settings.theme );
-  obj.settings.theme = icon.data( 'value' );
-  obj.dom.elem.addClass( 'theme-' + obj.settings.theme );
-
-  self.updateLinkLayerPreview_( obj );
-};
-
-gen.prototype.updateLinkLayerPreview_ = function( obj ) {
-  var self = this;
-  var preview = obj.dom.layer.find('.layer__wrapper:first .layer__preview');
-  if(obj.settings.theme === "light") {
-    preview.css('background-image', 'url(public/images/icons/link-light.svg), url(public/images/ad-window-tile.png)');
-  } else if(obj.settings.theme === "dark") {
-    preview.css('background-image', 'url(public/images/icons/link-dark.svg), url(public/images/ad-window-tile.png)');
-  } else {
-    preview.css('background-image', 'url(), url(public/images/ad-window-tile.png)');
-  }
 };
 
 /*=== Detect Drag over App ==========================================*/
@@ -268,24 +244,140 @@ gen.prototype.detectDragOver_ = function( e ) {
 gen.prototype.initLayersSortable_ = function() {
   var self = this;
   self.dom.layers.nestedSortable({
-    handle: 'div',
     items: 'li',
     toleranceElement: '> div',
-    forcePlaceholderSize: true,
-    helper: "clone",
     opacity: 0.5,
     revert: 0,
     tolerance: 'pointer',
-      toleranceElement: '> div',
-      expandOnHover: 700,
+    placeholder: 'layer__placeholder',
     stop: function(event, ui) {
-      var id = ui.item.data('id');
-      var obj = self.getObjByProp_( id );
-      console.log(obj);
+      var id = ui.item.data( 'id' );
+      var obj = self.getObjById_( id );
       self.setFocus_( obj );
-      self.updateLayersZindex();
+      self.updateParentWhenReceiveChildren_( obj );
+      self.dom.layers.find('.no-children').removeClass('.no-children')
+    },
+    isAllowed: function(item, parent) {
+      return self.verifyIfParentCanReceiveChildren_( item, parent );
     }
   });
+};
+
+/*=== Verify if Parent Can Receive Children ======================================*/
+gen.prototype.verifyIfParentCanReceiveChildren_ = function( item, parent ) {
+  var self = this;
+
+  if(parent) {
+    var accept = parent.data('accept');
+    var type = self.app.focusedObj.meta.type;
+
+    if( type && accept.indexOf( type ) !== -1 ) {
+      parent.removeClass('no-children');
+      return true;
+    } else {
+      parent.addClass('no-children');
+      return false;
+    }
+  } else {
+    return true;
+  }
+};
+
+/*=== Update Parent When Receive Children ======================================*/
+gen.prototype.updateParentWhenReceiveChildren_ = function( obj ) {
+  var self = this;
+
+  if( obj ) {
+    var id = obj.dom.layer.parent().closest( 'li' ).data( 'id' );
+  
+    if(id) {
+      var parent = self.getObjById_( id );
+
+      if(obj.meta.parent !== parent.meta.id) {
+        obj.meta.parent = parent.meta.id;
+
+        self.removeObjByIdFromArray_( obj.meta.id );
+        parent.elems.push( obj );
+
+        self.updatePositionAccordingToParent_( obj );
+        parent.dom.elem.append( obj.dom.elem );
+
+        var functionName = 'update' + capitaliseFirstLetter( parent.meta.type ) + '_';
+        if( typeof self[ functionName ] === 'function') {
+          self[ functionName ]( parent );
+        } 
+      }
+    } else {
+      if(obj.meta.parent !== null) {
+        obj.meta.parent = null;
+
+        self.removeObjByIdFromArray_( obj.meta.id );
+        self.ad.elems.push( obj );
+
+        self.updatePositionAccordingToParent_( obj );
+        self.dom.adContent.append( obj.dom.elem );
+      }
+    }
+  }
+};
+
+gen.prototype.updateGallery_ = function( parent ) {
+  var self = this;
+
+  for(var x=0; x<parent.elems.length; x++) {
+    var obj = parent.elems[x];
+    var reference = parent.elems[0];
+
+    var left = reference.style.width * x;
+    self.updateObjStyle_(obj, {
+      top:  0,
+      left: left
+    });
+
+    obj.dom.elem.css({
+      top:  obj.style.top + 'px',
+      left: obj.style.left + 'px'
+    }).draggable( 'disable' );
+  }
+};
+
+/*=== Update Position According To Parent ======================================*/
+gen.prototype.updatePositionAccordingToParent_ = function( obj ) {
+  var self = this;
+  var parentPosition = {
+    top:  0,
+    left: 0
+  };
+
+  var parent = self.getObjById_( obj.meta.parent );
+  if(parent) {
+    parentPosition = {
+      top:  parent.style.top,
+      left: parent.style.left
+    };
+  }
+
+  var position = {
+    top:  self.getElemAbsolutePosition_( obj ).top - parentPosition.top,
+    left: self.getElemAbsolutePosition_( obj ).left - parentPosition.left
+  };
+  
+  self.updateObjStyle_( obj, position );
+  self.updateElemInputPos_( obj );
+  obj.dom.elem.css({
+    top: position.top + 'px',
+    left: position.left + 'px'
+  });
+};
+
+/*=== Get Elem Absolute Position ==========================================*/
+gen.prototype.getElemAbsolutePosition_ = function( obj ) {
+  var self = this;
+  var position = {
+    top:  obj.dom.elem.offset().top - self.dom.adContent.offset().top,
+    left: obj.dom.elem.offset().left - self.dom.adContent.offset().left
+  };
+  return position;
 };
 
 /*=== Init Interactivity Related ==========================================*/
@@ -353,14 +445,15 @@ gen.prototype.detectBrowser_ = function() {
 /*=== Create Elem ==========================================*/
 gen.prototype.createElem_ = function( btn ) {
   var self = this;
-  var type = btn.data('instance');
+  var type = btn.data('type');
   var id = "ad-" + type + "-" + self.app.idPer[type];
   var name = self.text[ type ] + " " + self.app.idPer[type];
 
   var obj = {
     meta: {
-      instance: type,
+      type: type,
       id: id,
+      parents: null,
     },
     visibility: 'visible',
     locked: false,
@@ -373,31 +466,36 @@ gen.prototype.createElem_ = function( btn ) {
       left: 0,
       opacity: 1
     },
+    override: {
+      style: {}
+    },
     settings: {},
-    dom: {}
-  }
+    dom: {},
+    elems: []
+  };
 
   $.extend( obj.style, self.app.settings[ type ].style );
   $.extend( obj.settings, self.app.settings[ type ].settings );
 
   self.updateIdPerInteractivity_( type );
   self.ad.elems.push( obj );
-  self.setAdElemHtml_( obj );
-  self.setLayerElemHtml_( obj );
+  self.setElemHtml_( obj );
+  self.setLayerHtml_( obj );
   self.setOptionsHtml_( obj );
   self.setFocus_( obj );
 };
 
+/*=== Update Id Per Interactivity ==========================================*/
 gen.prototype.updateIdPerInteractivity_ = function( interactivity ) {
   var self = this;
   self.app.idPer[ interactivity ] = self.app.idPer[ interactivity ] + 1;
 };
 
-/*=== Set Ad Elem ==========================================*/
-gen.prototype.setAdElemHtml_ = function( obj ) {
+/*=== Set Elem HTML ==========================================*/
+gen.prototype.setElemHtml_ = function( obj ) {
   var self = this;
   var template = Mustache.render( self.app.templates.basic, obj );
-  var html = $(template).append( self.app.templates[ obj.meta.instance ] );
+  var html = $(template).append( self.app.templates[ obj.meta.type ] );
   
   self.dom.adContent.append( html );
   obj.dom.elem = self.dom.adContent.find('[data-id="' + obj.meta.id + '"]');
@@ -405,10 +503,10 @@ gen.prototype.setAdElemHtml_ = function( obj ) {
   self.initAdElemDrag_( obj );
 };
 
+/*=== Init Elem Drag ==========================================*/
 gen.prototype.initAdElemDrag_ = function( obj ) {
   var self = this;
   obj.dom.elem.draggable({
-    containment: "parent",
     start: function() {
       self.setFocus_( obj );
     },
@@ -430,12 +528,13 @@ gen.prototype.initAdElemDrag_ = function( obj ) {
   });
 };
 
+/*=== Init Elem Drag ==========================================*/
 gen.prototype.updateElemInputPos_ = function( obj ) {
   var self = this;
   var input = {
     top: obj.dom.options.find('[data-prop="top"]'),
     left: obj.dom.options.find('[data-prop="left"]')
-  }
+  };
 
   if(input.top) {
     input.top.val( obj.style.top );
@@ -445,7 +544,8 @@ gen.prototype.updateElemInputPos_ = function( obj ) {
   }
 };
 
-gen.prototype.setLayerElemHtml_ = function( obj ) {
+/*=== Set Layer HTML ==========================================*/
+gen.prototype.setLayerHtml_ = function( obj ) {
   var self = this;
   var html = Mustache.render( self.app.templates.layer, obj );
 
@@ -453,14 +553,15 @@ gen.prototype.setLayerElemHtml_ = function( obj ) {
   obj.dom.layer = self.dom.layers.find('[data-id="' + obj.meta.id + '"]');
 };
 
+/*=== Set Options HTML ==========================================*/
 gen.prototype.setOptionsHtml_ = function( obj ) {
   var self = this;
   var construct = {
     elem: obj,
     text: self.text
-  }
+  };
 
-  var html = Mustache.render( self.app.templates.options[ obj.meta.instance ], construct, {
+  var html = Mustache.render( self.app.templates.options[ obj.meta.type ], construct, {
     position: self.app.templates.options.partials.position,
     dimensions: self.app.templates.options.partials.dimensions
   });
@@ -469,22 +570,26 @@ gen.prototype.setOptionsHtml_ = function( obj ) {
   self.dom.options = self.dom.elemOptions.find('[data-id="' + obj.meta.id + '"]');
 };
 
-
+/*=== Update Layers Z-Index =====================================*/
 gen.prototype.updateLayersZindex = function() {
   var self = this;
-  var layersArr = self.dom.layers.sortable('toArray', {attribute: 'data-id'}).reverse();
+  var layersArr = self.dom.layers.nestedSortable('toArray', {attribute: 'data-id'}).reverse();
+  console.log(layersArr);
 
   for(var x=0; x<layersArr.length; x++) {
-    var obj = self.getObjByProp_( layersArr[x] );
-    self.updateObjStyle_( obj, {'zIndex': x} );
-    obj.dom.elem.css('zIndex', x);
+    var obj = self.getObjById_( layersArr[x] );
+    if( obj ) {
+      self.updateObjStyle_( obj, {'zIndex': x} );
+      obj.dom.elem.css('zIndex', x);
+    }
   }
 };
 
+/*=== Toggle Visibility =====================================*/
 gen.prototype.toggleVisibility_ = function( elem ) {
   var self = this;
   var id = elem.data('id');
-  var obj = self.getObjByProp_( id );
+  var obj = self.getObjById_( id );
 
   if(obj.visibility === "visible") {
     obj.visibility = 'hidden';
@@ -497,6 +602,7 @@ gen.prototype.toggleVisibility_ = function( elem ) {
   }
 };
 
+/*=== Set Focus =====================================*/
 gen.prototype.setFocus_ = function( obj ) {
   var self = this;
 
@@ -512,72 +618,21 @@ gen.prototype.setFocus_ = function( obj ) {
     obj.dom.options = $('.options[data-id="'+ obj.meta.id +'"]');
     obj.dom.options.addClass('focus');
   } else {
-    self.app.focusedObj = null
+    self.app.focusedObj = null;
   }
 
   self.updateLockIcon_();
   self.updateOpacityValue_();
 };
 
+/*=== Update Layer Focus =====================================*/
 gen.prototype.updateLayerFocus_ = function( layer ) {
   var self = this;
   var id = layer.data( "id" );
-  var obj = self.getObjByProp_( id );
+  var obj = self.getObjById_( id );
   console.log(layer);
 
   self.setFocus_( obj );
-};
-
-gen.prototype.toggleLockElem_ = function() {
-  var self = this;
-
-  if(self.app.focusedObj.locked === false) {
-    self.app.focusedObj.locked = true;
-    self.app.focusedObj.dom.elem.addClass( 'locked' ).draggable( 'disable' );
-    self.app.focusedObj.dom.layer.addClass( 'locked' );
-  } else {
-    self.app.focusedObj.locked = false;
-    self.app.focusedObj.dom.elem.removeClass( 'locked' ).draggable( 'enable' );
-    self.app.focusedObj.dom.layer.removeClass( 'locked' );
-  }
-
-  self.updateLockIcon_();
-};
-
-gen.prototype.updateLockIcon_ = function() {
-  var self = this;
-
-  if(self.app.focusedObj === null) {
-    self.dom.lock.closest('.layers__lock').addClass('disabled');
-  } else {
-    self.dom.lock.closest('.layers__lock').removeClass('disabled');
-
-    if(self.app.focusedObj.locked === true) {
-      self.dom.lock.addClass('active');
-    } else {
-      self.dom.lock.removeClass('active');
-    }
-  }
-};
-
-gen.prototype.updateElemOpacity_ = function() {
-  var self = this;
-  var opacity = self.dom.opacity.val() / 100;
-
-  self.updateObjStyle_( self.app.focusedObj, {'opacity': opacity} );
-  self.app.focusedObj.dom.elem.css('opacity', opacity);
-};
-
-gen.prototype.updateOpacityValue_ = function() {
-  var self = this;
-  if(self.app.focusedObj === null) {
-    self.dom.opacity.closest('.layers__opacity').addClass('disabled');
-  } else {
-    self.dom.opacity.closest('.layers__opacity').removeClass('disabled');
-
-    var opacity = self.app.focusedObj.style.opacity * 100;
-    self.dom.opacity.val( opacity );
-  }
 };
 
 /*=== Update Background-image on Elem =============================*/
@@ -588,10 +643,11 @@ gen.prototype.getImgFormInput_ = function( input ) {
   });
 };
 
+/*=== Update Obj Img =============================*/
 gen.prototype.updateObjImg_ = function( input, img ) {
   var self = this;
   var elem = input.closest('[data-id]');
-  var obj = self.getObjByProp_( elem.data('id') );
+  var obj = self.getObjById_( elem.data('id') );
 
   self.updateObjStyle_( obj, {
     'width':  img.width,
@@ -604,6 +660,7 @@ gen.prototype.updateObjImg_ = function( input, img ) {
   self.updateOptionsImg_( obj );
 };
 
+/*=== Update Elem Img =============================*/
 gen.prototype.updateElemImg_ = function( obj ) {
   var self = this;
   var bg = obj.dom.elem.find('.ad-elem__bg');
@@ -623,6 +680,7 @@ gen.prototype.updateElemImg_ = function( obj ) {
   name.remove();
 };
 
+/*=== Update Layer Img =============================*/
 gen.prototype.updateLayerImg_ = function( obj ) {
   var self = this;
   var preview = obj.dom.layer.find('.layer__preview');
@@ -632,6 +690,7 @@ gen.prototype.updateLayerImg_ = function( obj ) {
   });
 };
 
+/*=== Update Options Img =============================*/
 gen.prototype.updateOptionsImg_ = function( obj ) {
   var self = this;
 
@@ -639,21 +698,50 @@ gen.prototype.updateOptionsImg_ = function( obj ) {
   self.setOptionsInputValue_( 'height' );
 };
 
+/*=== Update Obj Style =============================*/
 gen.prototype.updateObjStyle_ = function( obj, style ) {
   var self = this;
-  console.log(obj);
-  $.extend( obj.style, style);
+  if( obj && style) {
+    $.extend( obj.style, style);
+  }
 };
 
-gen.prototype.getObjByProp_ = function( id ) {
+/*=== Get Obj By Id =============================*/
+gen.prototype.getObjById_ = function( id, array ) {
   var self = this;
-  var result = self.ad.elems.filter(function( obj ) {
-    return obj.meta.id == id;
-  });
+  if(!array) array = self.ad.elems;
 
-  return result[0];
+  for(var x=0; x<array.length; x++ ) {
+    if( typeof( array[x] ) === 'object' ) {
+      if( array[x].meta.id === id ) {
+        return array[x];
+      } 
+    
+      var found = self.getObjById_( id, array[x].elems );
+      if (found) return found;
+    }  
+  }
 };
 
+/*=== Remove Obj by Id From Array =============================*/
+gen.prototype.removeObjByIdFromArray_ = function( id, array ) {
+  var self = this;
+
+  if(!array) array = self.ad.elems;
+
+  for(var x=0; x<array.length; x++ ) {
+    if( array[x].meta.id === id ) {
+      array.splice(x,1);
+      return false;
+    } else {
+      if( array[x].elems) {
+        self.removeObjByIdFromArray_( id, array[x] );
+      }
+    }
+  }
+};
+
+/*=== Update Key Pressed =============================*/
 gen.prototype.updateKeyPressed_ = function( e ) {
   var self = this;
 
@@ -675,3 +763,7 @@ gen.prototype.verifyEnter_ = function( e ) {
     $(':focus').blur();
   }
 };
+
+//@prepros-append _partials/lock.js
+//@prepros-append _partials/opacity.js
+//@prepros-append _partials/link.js

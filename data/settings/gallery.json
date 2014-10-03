@@ -1,14 +1,15 @@
 {
 	"settings": {
 		"color": {
-			"hex":  "#7FDBFF",
-			"rgba": "rgba(127,219,255,.5)"
+			"hex":  "#3D9970",
+			"rgba": "rgba(61,153,112,.5)"
 		},
-		"class": "can-drop",
+		"default": {
+		},
 		"readonly": {
 			"dimensions": true
 		},
-		"accept": [ "image", "link" ]
+		"accept": [ "image" ]
 	},
 	"style": {
 		"width":  70,

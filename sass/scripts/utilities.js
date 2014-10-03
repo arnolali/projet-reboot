@@ -20,7 +20,7 @@ function detectBrowser() {
     return M;
 }
 
-function capitaliseFirstLetter(string) {
+function capitaliseFirstLetter( string ) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
@@ -28,7 +28,7 @@ function uniqueId() {
     return Math.round( new Date().getTime() + ( Math.random() * 100 ) );
 };
 
-function getImgFromInput(input, callback) {
+function getImgFromInput( input, callback ) {
     if(inputContainImg( input )) {
         var file = input.prop("files")[0];
         var reader = new FileReader();
@@ -49,8 +49,7 @@ function getImgFromInput(input, callback) {
     }
 };
 
-
-function inputContainImg(input) {
+function inputContainImg( input ) {
     var file = input[0].files[0];
     var type = file.type;
     if(type === "image/gif" || type === "image/jpeg" || type === "image/jpg" || type === "image/png") {

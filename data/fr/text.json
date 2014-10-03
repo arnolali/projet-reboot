@@ -1,8 +1,10 @@
 {
 	"cta": {
+		"gallery": "Galerie",
 		"image": "Glisser votre image ici",
 		"link": "Lien"
 	},
+	"gallery": "Galerie",
 	"height": "Hauteur",
 	"home": "Accueil",
 	"image": "Image",
