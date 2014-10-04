@@ -1,10 +1,14 @@
 /*=== Update Elem Opacity =====================================*/
 gen.prototype.updateElemOpacity_ = function() {
   var self = this;
-  var opacity = self.dom.opacity.val() / 100;
+  var value = self.dom.opacity.val() <= 100 ? self.dom.opacity.val() : 100;
+  var opacity = value / 100;
 
-  self.updateObjStyle_( self.app.focusedObj, {'opacity': opacity} );
-  self.app.focusedObj.dom.elem.css('opacity', opacity);
+  self.dom.opacity.val( value );
+
+  self.updateStyle_(self.app.focusedObj, {
+    opacity: opacity
+  })
 };
 
 /*=== Update Opacity Value =====================================*/

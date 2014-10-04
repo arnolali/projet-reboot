@@ -1,12 +1,10 @@
-# AdFly #
+# Projet Reboot #
 
-Outils de création publicitaire pour les annonceurs de La Presse+.
+Outils de création publicitaire pour La Presse+ basé sur une "métaphore" de Photoshop.
 
 ## URL ##
-### Prod ###
-- http://troussecreation.lapresse.ca/incontournables-du-voyage
 ### GIT ###
-- https://github.com/arnolali/incontournables-du-voyage.git
+- https://github.com/arnolali/projet-reboot.git
 
 ## Dépendances ##
-- Imagick 3.0.0+
+- PHP 5.4 et +

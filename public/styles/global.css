@@ -580,44 +580,23 @@ input.pixel, input.percent {
   position: absolute;
   top: 0;
   left: 0;
-}
-.ad-elem .ad-elem__bg, .ad-elem--image .ad-elem__bg, .ad-elem--link .ad-elem__bg {
   background-size: contain;
+  background-position: 50% 50%;
 }
 
-.ad-elem--image {
-  -webkit-transition: width 0.3s linear, height 0.3s linear;
-  -moz-transition: width 0.3s linear, height 0.3s linear;
-  -o-transition: width 0.3s linear, height 0.3s linear;
-  transition: width 0.3s linear, height 0.3s linear;
-}
-
-.ad-elem--link.theme-light > .ad-elem__bg {
+.ad-elem--link.theme-light {
   background-color: transparent !important;
   background-image: url(../images/icons/link-light.svg);
-  background-size: cover;
-  background-position: 50% 50%;
 }
-.ad-elem--link.theme-light > .ad-elem__bg .ad-elem__bg__name {
+.ad-elem--link.theme-light .ad-elem__bg__name {
   display: none;
 }
-.ad-elem--link.theme-dark > .ad-elem__bg {
+.ad-elem--link.theme-dark {
   background-color: transparent !important;
   background-image: url(../images/icons/link-dark.svg);
-  background-size: cover;
-  background-position: 50% 50%;
 }
-.ad-elem--link.theme-dark > .ad-elem__bg .ad-elem__bg__name {
+.ad-elem--link.theme-dark .ad-elem__bg__name {
   display: none;
-}
-
-.ad-elem__bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
 }
 
 .ad-elem__bg__name {
@@ -627,6 +606,7 @@ input.pixel, input.percent {
   width: 100%;
   text-align: center;
   text-transform: uppercase;
+  pointer-events: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

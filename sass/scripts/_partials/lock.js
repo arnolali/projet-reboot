@@ -30,7 +30,6 @@ gen.prototype.lockHtml_ = function( obj ) {
     obj.elems[x].override.locked = obj.locked;
     self.lockHtml_( obj.elems[x] );
   }
-  
 };
 
 /*=== Update Lock Icon =====================================*/

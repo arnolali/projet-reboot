@@ -2,54 +2,34 @@
 	position: absolute;
 	top:  0;
 	left: 0;
-
-	.ad-elem__bg {
-		background-size: contain;
-	}
+	background-size: contain;
+	background-position: 50% 50%;
 }
 
 .ad-elem--image {
 	@extend .ad-elem;
-	@include transition(width $s linear, height $s linear);
 }
 
 .ad-elem--link {
 	@extend .ad-elem;
 
 	&.theme-light {
-		>.ad-elem__bg {
-			background-color: rgba(0,0,0,0) !important;
-			background-image: url(../images/icons/link-light.svg);
-			background-size: cover;
-			background-position: 50% 50%;
+		background-color: rgba(0,0,0,0) !important;
+		background-image: url(../images/icons/link-light.svg);
 
-			.ad-elem__bg__name {
-				display: none;
-			}
+		.ad-elem__bg__name {
+			display: none;
 		}
 	}
 
 	&.theme-dark {
-		>.ad-elem__bg {
-			background-color: rgba(0,0,0,0) !important;
-			background-image: url(../images/icons/link-dark.svg);
-			background-size: cover;
-			background-position: 50% 50%;
+		background-color: rgba(0,0,0,0) !important;
+		background-image: url(../images/icons/link-dark.svg);
 
-			.ad-elem__bg__name {
-				display: none; 
-			}
+		.ad-elem__bg__name {
+			display: none; 
 		}
 	}
-}
-
-.ad-elem__bg {
-	position: absolute;
-	top:  0;
-	left: 0;
-	width:  100%;
-	height: 100%;
-	pointer-events: none;
 }
 
 .ad-elem__bg__name {
@@ -59,6 +39,7 @@
 	width: 100%;
 	text-align: center;
 	text-transform: uppercase;
+	pointer-events: none;
 	@include user-select(none);
 	@include transform(translateY(-50%));
 }
