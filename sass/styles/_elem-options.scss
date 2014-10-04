@@ -11,9 +11,9 @@
 }
 
 .elem-options {
-	position: absolute;
+	position: fixed;
 	top:   0;
-	right: 0;
+	right: 270px;
 	width: 270px;
 	max-height: 100%;
 	background-color: $medium-grey;
