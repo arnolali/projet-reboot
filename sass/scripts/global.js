@@ -42,6 +42,7 @@ gen = function(defaultApp, root, defaultAd) {
     $.getJSON( self.path.data + self.app.culture + "/text.json", function(r) { self.text = r; } ),
     $.get( self.path.templates + "_interactivities/basic.mustache", function(r) { self.app.templates.basic = r; } ),
     $.get( self.path.templates + "_partials/layer.mustache", function(r) { self.app.templates.layer = r; } ),
+    $.get( self.path.templates + "_partials/erase.mustache", function(r) { self.app.templates.erase = r; } ),
     $.get( self.path.templates + "/_options/_partials/position.mustache", function(r) { self.app.templates.options.partials.position = r; } ),
     $.get( self.path.templates + "/_options/_partials/dimensions.mustache", function(r) { self.app.templates.options.partials.dimensions = r; } )
   ).then(function() { // Ensuite initialise la page
@@ -63,12 +64,13 @@ gen.prototype.map_ = function() {
     interactivitiesToolbar: $('.interactivities-toolbar'),
     layers: $('.layers__list'),
     lock: $('.js-lock-elem'),
+    askErase: $('.js-askErase'),
     opacity: $('.js-opacity-elem'),
   };
 };
 
 //=== INIT START =====================================================
-gen.prototype.init_ = function(pObj) {
+gen.prototype.init_ = function() {
   var self = this;
 
   self.detectOs_();
@@ -132,6 +134,18 @@ gen.prototype.bindEvents_ = function() {
     self.updateElemOpacity_();
   });
 
+  self.dom.askErase.on('click', function() {
+    self.askErase_();
+  });
+
+  self.dom.form.on('click', '.js-erase', function() {
+    self.erase_();
+  });
+
+  self.dom.form.on('click', '.js-close-popup', function() {
+    self.closePopup_( $(this).closest('.popup') );
+  });
+
   self.dom.adContent.on('change', '.js-dropzone', function() {
     self.getImgFormInput_( $(this) );
   });
@@ -147,6 +161,11 @@ gen.prototype.bindEvents_ = function() {
   self.dom.elemOptions.on('change', '.js-update-elem-setting', function() {
     self.updateElemSetting_( $(this) );
   });
+};
+
+gen.prototype.closePopup_ = function( popup ) {
+  var self = this;
+  popup.remove();
 };
 
 /*=== Update Elem Setting ==========================================*/
@@ -527,6 +546,7 @@ gen.prototype.setFocus_ = function( obj ) {
     self.app.focusedObj = null;
   }
 
+  self.updateEraseIcon_();
   self.updateLockIcon_();
   self.updateOpacityValue_();
 };
@@ -536,7 +556,6 @@ gen.prototype.updateLayerFocus_ = function( layer ) {
   var self = this;
   var id = layer.data( "id" );
   var obj = self.getObjById_( id );
-  console.log(layer);
 
   self.setFocus_( obj );
 };
@@ -561,18 +580,18 @@ gen.prototype.getObjById_ = function( id, array ) {
 /*=== Remove Obj by Id From Array =============================*/
 gen.prototype.removeObjByIdFromArray_ = function( id, array ) {
   var self = this;
-
   if(!array) array = self.ad.elems;
 
   for(var x=0; x<array.length; x++ ) {
-    if( array[x].meta.id === id ) {
-      array.splice(x,1);
-      return false;
-    } else {
-      if( array[x].elems) {
-        self.removeObjByIdFromArray_( id, array[x] );
+    if( typeof( array[x] ) === 'object' ) {
+      if( array[x].meta.id === id ) {
+        array.splice(x,1);
+        return false;
       }
-    }
+
+      var found = self.removeObjByIdFromArray_( id, array[x].elems );
+      if (found) return found;
+    } 
   }
 };
 
@@ -662,7 +681,7 @@ gen.prototype.setOptionsInputValue_ = function( prop, obj ) {
   }
 };
 
-
+//@prepros-append _partials/erase.js
 //@prepros-append _partials/lock.js
 //@prepros-append _partials/opacity.js
 

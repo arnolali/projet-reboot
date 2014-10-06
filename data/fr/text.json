@@ -4,13 +4,16 @@
 		"image": "Glisser votre image ici",
 		"link": "Lien"
 	},
+	"deleteLayer": "Supprimer le calque",
 	"gallery": "Galerie",
 	"height": "Hauteur",
 	"home": "Accueil",
 	"image": "Image",
 	"link": "Lien",
 	"lock": "Verrou",
+	"no": "Non",
 	"opacity": "Opacité",
 	"site-name": "Générateur",
-	"width": "Largeur"
+	"width": "Largeur",
+	"yes": "Oui"
 }

@@ -1,5 +1,5 @@
 <aside class="sidebar layers">
-	<div class="layers__basic-opt">
+	<header class="layers__basic-opt">
 		<div class="layers__lock disabled">
 			<span class="label">{{text.lock}}:</span>
 			<span class="lock-icon js-lock-elem"></span>
@@ -8,7 +8,11 @@
 			<span class="label">{{text.opacity}}:</span>
 			<input type="number" min="0" max="100" value="100" class="[ input-dark percent ] js-opacity-elem">
 		</div>
-	</div>
-	<ol class="layers__list">
-	</ol>
+	</header>
+
+	<ol class="layers__list"></ol>
+
+	<footer class="layers__footer">
+		<span class="[ icon trash disabled ] js-askErase" title="{{text.deleteLayer}}">{{text.deleteLayer}}</span>
+	</footer>
 </aside>

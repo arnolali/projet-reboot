@@ -102,6 +102,27 @@ input {
 	overflow: hidden;
 }
 
+.btn {
+	display: inline-block;
+	position: relative;
+	min-width: 100px;
+	background-color: $ultra-light-grey;
+	text-align: center;
+	text-decoration: none;
+	white-space: nowrap;
+	padding: .25rem .5rem;
+	border: solid 1px transparent;
+	cursor: pointer;
+
+	&:hover {
+		border: solid 1px $dark-grey;
+	}
+
+	&.action {
+		background-color: $focus-grey;
+	}
+}
+
 .dragover {
 	.can-drop {
 		outline: solid 5px $focus-grey;

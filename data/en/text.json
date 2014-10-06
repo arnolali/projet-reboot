@@ -4,13 +4,16 @@
 		"image": "Drop your image here",
 		"link": "Link"
 	},
+	"deleteLayer": "Delete layer",
 	"gallery": "Gallery",
 	"height": "Height",
 	"home": "Home",
 	"image": "Image",
 	"link": "Link",
 	"lock": "Lock",
+	"no": "No",
 	"opacity": "Opacity",
 	"site-name": "Generator",
-	"width": "Width"
+	"width": "Width",
+	"yes": "Yes"
 }
