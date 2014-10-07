@@ -12,6 +12,8 @@ gen.prototype.updateObjImg_ = function( input, img ) {
   var elem = input.closest('[data-id]');
   var obj = self.getObjById_( elem.data('id') );
 
+  elem.removeClass('empty');
+
   self.updateStyle_( obj, {
     width:  img.width,
     height: img.height,
@@ -24,11 +26,11 @@ gen.prototype.updateObjImg_ = function( input, img ) {
 };
 
 /*=== Update Layer Img =============================*/
-gen.prototype.updateLayerImg_ = function( obj ) {
+/*gen.prototype.updateLayerImg_ = function( obj ) {
   var self = this;
   var preview = obj.dom.layer.find('.layer__preview');
 
   preview.css({
     'background-image': 'url("' + obj.style.backgroundImage + '"), url("' + self.path.images + 'ad-window-tile.png")'
   });
-};
+};*/

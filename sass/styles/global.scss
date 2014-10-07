@@ -1,11 +1,12 @@
 @charset "UTF-8";
 
-@import '_global';
-@import '_mixins';
-@import '_normalize';
+@import 'basic/_global';
+@import 'basic/_mixins';
+@import 'basic/_normalize';
 
-@import '_fonts';
-@import '_style-guide';
+@import 'basic/_fonts';
+@import 'libs/_colpick';
+@import 'basic/_style-guide';
 
 @import '_formats';
 @import '_sidebar';

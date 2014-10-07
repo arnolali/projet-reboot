@@ -4,7 +4,7 @@
 			"hex":  "#7FDBFF",
 			"rgba": "rgba(127,219,255,.5)"
 		},
-		"class": "can-drop",
+		"class": "can-drop empty",
 		"readonly": {
 			"dimensions": true
 		},

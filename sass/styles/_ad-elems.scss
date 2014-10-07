@@ -2,39 +2,33 @@
 	position: absolute;
 	top:  0;
 	left: 0;
-	background-size: contain;
+	background-size: cover;
 	background-position: 50% 50%;
 }
 
 .ad-elem--image {
 	@extend .ad-elem;
+	.ad-elem__bg__name { display: none; }
+
+	&.empty {
+		background-color: rgba(127,219,255,.5);
+		.ad-elem__bg__name { display: block; }
+	}
 }
 
 .ad-elem--link {
 	@extend .ad-elem;
 
-	&.theme-light {
-		background-color: rgba(0,0,0,0) !important;
-		background-image: url(../images/icons/link-light.svg);
-
-		.ad-elem__bg__name {
-			display: none;
-		}
-	}
-
-	&.theme-dark {
-		background-color: rgba(0,0,0,0) !important;
-		background-image: url(../images/icons/link-dark.svg);
-
-		.ad-elem__bg__name {
-			display: none; 
-		}
+	.ad-elem__bg__name { display: none; }
+	&.empty {
+		background-color: rgba(177,13,201,.5);
+		.ad-elem__bg__name { display: block; }
 	}
 }
 
 .ad-elem__bg__name {
 	position: absolute;
-	top: 50%;
+	top:  50%;
 	left: 0;
 	width: 100%;
 	text-align: center;

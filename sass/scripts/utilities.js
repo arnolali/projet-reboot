@@ -58,3 +58,8 @@ function inputContainImg( input ) {
         return false;
     }
 };
+
+function svgToBase64 ( svg ) {
+    var base64 = 'data:image/svg+xml;base64,' + btoa( svg );
+    return base64;
+}

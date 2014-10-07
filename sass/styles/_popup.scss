@@ -22,10 +22,37 @@
 		height: auto;
 		background-color: $medium-grey;
 		color: $white;
-		padding: 1rem;
-		@include box-sizing(border-box);
 		@include box-shadow(0 15px 50px 10px rgba(0,0,0,.5));
 		@include transform(translate(-50%, -50%));
+	}
+
+	.header {
+		position: relative;
+		float: left;
+		width:  100%;
+		text-align: center;
+	}
+
+	.content {
+		position: relative;
+		float: left;
+		width: 100%;
+		@include box-sizing(border-box);
+		padding: 1rem;
+	}
+
+	.footer {
+		position: relative;
+		float: left;
+		width: 100%;
+		@include box-sizing(border-box);
+		padding: 0 1rem 1rem 1rem;
+
+		.btn {
+			float: left;
+
+			&.action { float: right; }
+		}
 	}
 
 	.preview {
@@ -35,25 +62,11 @@
 		height: 30px;
 		background-image:  url(), url('../images/ad-window-tile.png');
 		background-repeat: no-repeat, repeat;
-		background-position: 0 0, 50% 50%;
+		background-position: 50% 50%, 50% 50%;
 		background-size:   cover, 8px 8px;
 		border: solid 1px $black;
 		margin: 0 1rem 0 0;
 		vertical-align: middle;
 		z-index: 1;
-	}
-
-
-	footer {
-		position: relative;
-		float: left;
-		width: 100%;
-		margin: 1rem 0 0 0;
-
-		.btn {
-			float: left;
-
-			&.action { float: right; }
-		}
 	}
 }

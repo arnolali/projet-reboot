@@ -18,7 +18,8 @@ gen = function(defaultApp, root, defaultAd) {
     templates: {
       options: {
         partials: {}
-      }
+      },
+      icons: {}
     },
     idPer: {},
     dragover: false,
@@ -40,11 +41,12 @@ gen = function(defaultApp, root, defaultAd) {
 
   $.when( // Télécharge tous les json externes nécessaires
     $.getJSON( self.path.data + self.app.culture + "/text.json", function(r) { self.text = r; } ),
-    $.get( self.path.templates + "_interactivities/basic.mustache", function(r) { self.app.templates.basic = r; } ),
-    $.get( self.path.templates + "_partials/layer.mustache", function(r) { self.app.templates.layer = r; } ),
-    $.get( self.path.templates + "_partials/erase.mustache", function(r) { self.app.templates.erase = r; } ),
-    $.get( self.path.templates + "/_options/_partials/position.mustache", function(r) { self.app.templates.options.partials.position = r; } ),
-    $.get( self.path.templates + "/_options/_partials/dimensions.mustache", function(r) { self.app.templates.options.partials.dimensions = r; } )
+    $.get( self.path.templates + "interactivities/basic.mustache", function(r) { self.app.templates.basic = r; } ),
+    $.get( self.path.templates + "partials/layer.mustache", function(r) { self.app.templates.layer = r; } ),
+    $.get( self.path.templates + "partials/erase.mustache", function(r) { self.app.templates.erase = r; } ),
+    $.get( self.path.templates + "/options/partials/position.mustache", function(r) { self.app.templates.options.partials.position = r; } ),
+    $.get( self.path.templates + "/options/partials/dimensions.mustache", function(r) { self.app.templates.options.partials.dimensions = r; } ),
+    $.get( self.path.templates + "/icons/link.mustache", function(r) { self.app.templates.icons.link = r; } )
   ).then(function() { // Ensuite initialise la page
     //--- functions -----------------
     self.map_();
@@ -66,6 +68,8 @@ gen.prototype.map_ = function() {
     lock: $('.js-lock-elem'),
     askErase: $('.js-askErase'),
     opacity: $('.js-opacity-elem'),
+    colors: $('.colors'),
+    colorsFlip: $('.js-colors-flip')
   };
 };
 
@@ -79,6 +83,7 @@ gen.prototype.init_ = function() {
   self.initInteractivitiesRelated_();
   self.initLayersSortable_();
   self.initDragElemOptions_();
+  self.initColorInput_();
 };
 
 //=== BIND START =====================================================
@@ -142,6 +147,10 @@ gen.prototype.bindEvents_ = function() {
     self.erase_();
   });
 
+  self.dom.colorsFlip.on('click', function() {
+    self.colorsFlip_();
+  });
+
   self.dom.form.on('click', '.js-close-popup', function() {
     self.closePopup_( $(this).closest('.popup') );
   });
@@ -160,6 +169,41 @@ gen.prototype.bindEvents_ = function() {
 
   self.dom.elemOptions.on('change', '.js-update-elem-setting', function() {
     self.updateElemSetting_( $(this) );
+  });
+};
+
+gen.prototype.colorsFlip_ = function() {
+  var self = this;
+  var input = self.dom.colors.find('.input-color');
+  input.toggleClass('front back');
+
+  if(self.app.focusedObj !== null) {
+    var functionName = 'update' + capitaliseFirstLetter( self.app.focusedObj.meta.type ) + 'Colors_';
+
+    if( typeof self[ functionName ] === 'function') {
+      self[ functionName ]( self.app.focusedObj );
+    } 
+  }
+};
+
+/*=== Init Color Input ==========================================*/
+gen.prototype.initColorInput_ = function( interactivity ) {
+  var self = this;
+  $('.input-color').colpick({
+    layout:'rgbhsbhex',
+    color:'ffffff',
+    onSubmit:function(hsb,hex,rgb,el) {
+      $(el).css('background-color', '#' + hex);
+      $(el).colpickHide();
+
+      if(self.app.focusedObj !== null) {
+        var functionName = 'update' + capitaliseFirstLetter( self.app.focusedObj.meta.type ) + 'Colors_';
+
+        if( typeof self[ functionName ] === 'function') {
+          self[ functionName ]( self.app.focusedObj );
+        } 
+      }
+    },
   });
 };
 
@@ -239,7 +283,7 @@ gen.prototype.initInteractivitiesRelated_ = function() {
 /*=== Get Interactivity Template ==========================================*/
 gen.prototype.getInteractivityTemplate_ = function( interactivity ) {
   var self = this;
-  $.get( self.path.templates + "_interactivities/" + interactivity + ".mustache")
+  $.get( self.path.templates + "interactivities/" + interactivity + ".mustache")
   .done(function(r) { 
     self.app.templates[ interactivity ] = r; 
   });
@@ -248,7 +292,7 @@ gen.prototype.getInteractivityTemplate_ = function( interactivity ) {
 /*=== Get Interactivity Options Template ====================================*/
 gen.prototype.getInteractivityOptionsTemplate_ = function( interactivity ) {
   var self = this;
-  $.get( self.path.templates + "_options/" + interactivity + ".mustache" )
+  $.get( self.path.templates + "options/" + interactivity + ".mustache" )
   .done(function(r) { 
     self.app.templates.options[ interactivity ] = r; 
   });
@@ -612,29 +656,6 @@ gen.prototype.updateStyleAccordingToOptionsInput_ = function( input ) {
   self.updateStyle_( obj, style);
 };
 
-/*=== Update Key Pressed =============================*/
-gen.prototype.updateKeyPressed_ = function( e ) {
-  var self = this;
-
-  if(e) {
-    if(e.which === 17) {
-      self.app.keyPressed.ctrl = true;
-      console.log('ctrl');
-    }
-  } else {
-    self.app.keyPressed.ctrl = false;
-  }
-};
-
-/*=== Verify Enter ==========================================*/
-gen.prototype.verifyEnter_ = function( e ) {
-  var self = this;
-  if(e.keyCode == 13) {
-    e.preventDefault();
-    $(':focus').blur();
-  }
-};
-
 /*=== Update Prop =============================*/
 gen.prototype.updateStyle_ = function( obj, style ) {
   var self = this;
@@ -647,8 +668,19 @@ gen.prototype.updateStyle_ = function( obj, style ) {
     var cssValue = self.normalizeValueForCss_( property, style[property] );
     obj.dom.elem.css(property, cssValue );
     self.setOptionsInputValue_( property, obj );
+
+    if(property === 'backgroundImage') {
+      self.updateLayerPreview_( obj );
+    }
   }
 };
+
+gen.prototype.updateLayerPreview_ = function( obj ) {
+  var self = this;
+  obj.dom.layer.find('.layer__preview').css({
+    'background-image': 'url("' + obj.style.backgroundImage + '"), url("' + self.path.images + 'ad-window-tile.png")'
+  });
+}
 
 /*=== Update Obj Style =============================*/
 gen.prototype.updateObjStyle_ = function( obj, style ) {
@@ -681,10 +713,11 @@ gen.prototype.setOptionsInputValue_ = function( prop, obj ) {
   }
 };
 
-//@prepros-append _partials/erase.js
-//@prepros-append _partials/lock.js
-//@prepros-append _partials/opacity.js
+//@prepros-append partials/shortcuts.js
+//@prepros-append partials/erase.js
+//@prepros-append partials/lock.js
+//@prepros-append partials/opacity.js
 
-//@prepros-append _partials/image.js
-//@prepros-append _partials/link.js
-//@prepros-append _partials/gallery.js
+//@prepros-append interactivities/image.js
+//@prepros-append interactivities/link.js
+//@prepros-append interactivities/gallery.js
