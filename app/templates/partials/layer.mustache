@@ -1,9 +1,15 @@
-<li class="layer" data-id="{{meta.id}}" data-type="{{meta.instance}}" data-accept="{{#settings.accept}}{{.}} {{/settings.accept}}">
+<li 
+	class="layer{{#default.layer.class}} {{default.layer.class}}{{/default.layer.class}}" 
+	data-id="{{meta.id}}" 
+	data-type="{{meta.type}}" 
+	data-accept="{{#settings.accept}}{{.}} {{/settings.accept}}"
+>
 	<div class="layer__wrapper">
 		<div class="layer__visibility js-toggle-layer-visibility" style="background-color: {{settings.color.rgba}}"></div>
 		<div class="layer__infos">
-			<div class="layer__preview" style="background-image: url({{settings.default.layerPreview}}), url(public/images/ad-window-tile.png);"></div>
-			<div class="layer__name">{{text.layer}}</div>
+			<div class="layer__preview" style="background-image: url({{default.layer.preview}}), url(public/images/ad-window-tile.png);"></div>
+			<div class="layer__name">{{meta.name}}</div>
 		</div>
 	</div>
+	<ol></ol>
 </li>

@@ -1,18 +1,20 @@
 {
+	"align": "Align",
 	"cta": {
-		"gallery": "Gallery",
-		"image": "Drop your image here",
-		"link": "Link"
+		"image": "Drop your image here"
 	},
 	"deleteLayer": "Delete layer",
+	"element": "Element",
 	"gallery": "Gallery",
 	"height": "Height",
 	"home": "Home",
 	"image": "Image",
+	"layer": "Layer",
 	"link": "Link",
 	"lock": "Lock",
 	"no": "No",
 	"opacity": "Opacity",
+	"pager": "Pager",
 	"site-name": "Generator",
 	"width": "Width",
 	"yes": "Yes"

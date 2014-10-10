@@ -4,15 +4,25 @@
 			"hex":  "#3D9970",
 			"rgba": "rgba(61,153,112,.5)"
 		},
-		"default": {
+		"accept": [ "image" ],
+		"container": "elem__container"
+	},
+	"default": {
+		"elem": {
+			"class": "empty"
+		}
+	},
+	"initial": {
+		"style": {
+			"width":  70,
+			"height": 70
+		},
+		"exist": {
+			"pager": false,
+			"arrows": false
 		},
 		"readonly": {
 			"dimensions": true
-		},
-		"accept": [ "image" ]
-	},
-	"style": {
-		"width":  70,
-		"height": 70
+		}
 	}
 }

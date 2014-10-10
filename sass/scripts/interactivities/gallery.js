@@ -1,8 +1,27 @@
-gen.prototype.updateGallery_ = function( parent ) {
+gen.prototype.createGallery_ = function( obj ) {
+  var self = this;
+  
+};
+
+gen.prototype.updateGallery_ = function( obj ) {
   var self = this;
 
-  self.updateGalleryDimensions_( parent, parent.elems[0] );
-  self.updateGalleryChildrenPosition_( parent );
+  self.updateGalleryDimensions_( obj, obj.elems[0] );
+  self.updateGalleryChildrenPosition_( obj );
+
+  if( obj.elems.length <= 1 ) {
+    if( obj.exist.pager ) {
+      var pagerId =  obj.meta.id + '-pager';
+      var obj = self.getObjById_( obj, pagerId );
+
+
+      self.erase_( obj );
+    }
+  }
+  if(!obj.exist.pager && obj.elems.length >= 2) {
+    obj.exist.pager = true;
+    self.createGalleryPager_( obj );
+  }
 };
 
 gen.prototype.updateGalleryDimensions_ = function( gallery, obj ) {
@@ -26,6 +45,25 @@ gen.prototype.updateGalleryChildrenPosition_ = function( gallery ) {
       left: left
     });
 
-    obj.dom.elem.draggable( 'disable' );
+    if(obj.meta.type === 'image') {
+      console.log('readonly');
+      self.updateReadonly_( {position: true}, obj );
+      obj.dom.elem.draggable( 'disable' );
+    }
   }
+};
+
+gen.prototype.createGalleryPager_ = function( gallery ) {
+  var self = this;
+
+  var obj = {
+    meta: {
+      type: 'gallery-pager',
+      id: gallery.meta.id + '-pager',
+      parent: gallery.meta.id,
+      name: self.text.pager
+    }
+  };
+
+  self.createElem_( obj );
 };

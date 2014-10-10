@@ -2,14 +2,14 @@
 	<span class="background"></span>
 	<div class="window">
 		<header class="header" style="background-color: {{obj.settings.color.rgba}};">
-			{{obj.text.layer}}
+			{{obj.text.name}}
 		</header>
 		
 		<div class="content">
 			{{#obj.style.backgroundImage}}
 			<div class="preview" style="background-image: url({{obj.style.backgroundImage}}), url(public/images/ad-window-tile.png);"></div>
 			{{/obj.style.backgroundImage}}
-			<strong>{{text.deleteLayer}} "{{obj.text.layer}}" ?</strong>
+			<strong>{{text.deleteLayer}} "{{obj.text.name}}" ?</strong>
 		</div>
 
 		<footer class="footer">

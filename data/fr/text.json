@@ -1,18 +1,20 @@
 {
+	"align": "Aligner",
 	"cta": {
-		"gallery": "Galerie",
-		"image": "Glisser votre image ici",
-		"link": "Lien"
+		"image": "Glisser votre image ici"
 	},
 	"deleteLayer": "Supprimer le calque",
+	"element": "Élément",
 	"gallery": "Galerie",
 	"height": "Hauteur",
 	"home": "Accueil",
 	"image": "Image",
+	"layer": "Calque",
 	"link": "Lien",
 	"lock": "Verrou",
 	"no": "Non",
 	"opacity": "Opacité",
+	"pager": "Pagination",
 	"site-name": "Générateur",
 	"width": "Largeur",
 	"yes": "Oui"

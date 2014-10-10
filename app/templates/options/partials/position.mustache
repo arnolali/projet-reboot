@@ -1,6 +1,32 @@
-<div class="position row table">
+<div class="position align row table{{#elem.readonly.position}} disabled{{/elem.readonly.position}}">
+	<div class="table-cell label-cell">
+		<span class="label">{{text.align}}:</span> 
+	</div>
 	<div class="table-cell">
+		<span class="[ icon align-vertical-top ] js-align-elem" data-position="vertical-top"></span>
+	</div>
+	<div class="table-cell">
+		<span class="[ icon align-vertical-middle ] js-align-elem" data-position="vertical-middle"></span>
+	</div>
+	<div class="table-cell">
+		<span class="[ icon align-vertical-bottom ] js-align-elem" data-position="vertical-bottom"></span>
+	</div>
+	<div class="table-cell">
+		<span class="[ icon align-horizontal-left ] js-align-elem" data-position="horizontal-left"></span>
+	</div>
+	<div class="table-cell">
+		<span class="[ icon align-horizontal-middle ] js-align-elem" data-position="horizontal-middle"></span>
+	</div>
+	<div class="table-cell">
+		<span class="[ icon align-horizontal-right ] js-align-elem" data-position="horizontal-right"></span>
+	</div>
+</div>
+
+<div class="position row table{{#elem.readonly.position}} disabled{{/elem.readonly.position}}">
+	<div class="table-cell label-cell">
 		<span class="label">x:</span>
+	</div>
+	<div class="table-cell">
 		<input 
 			type="number" 
 			{{#elem.settings.min.left}}min="{{elem.settings.min.left}}"{{/elem.settings.min.left}} 
@@ -10,8 +36,10 @@
 			value="{{elem.style.left}}"
 		>
 	</div>
-	<div class="table-cell">
+	<div class="table-cell label-cell">
 		<span class="label">y:</span>
+	</div>
+	<div class="table-cell">
 		<input 
 			type="number" 
 			{{#elem.settings.min.top}}min="{{elem.settings.min.top}}"{{/elem.settings.min.top}} 

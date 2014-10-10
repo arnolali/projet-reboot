@@ -1,0 +1,20 @@
+{
+	"settings": {
+		"color": {
+			"hex":  "#B2FFDD",
+			"rgba": "rgba(178,255,221,.5)"
+		}
+	},
+	"default": {
+		"layer": {
+			"class": "pin"
+		},
+		"style": {
+			"height": 6,
+			"backgroundColor": "rgba(0,0,0,.75)",
+			"font-size": 6,
+			"borderRadius": 10,
+			"padding": 5
+		}
+	},
+}

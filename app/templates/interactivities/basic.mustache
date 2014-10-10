@@ -1,8 +1,17 @@
-<div class="ad-elem--{{meta.type}}{{#settings.class.length}} {{settings.class}}{{/settings.class.length}}" data-id="{{meta.id}}" 
-style="
-	{{#style.width}}width: {{style.width}}px;{{/style.width}}
-	{{#style.height}} height: {{style.height}}px;{{/style.height}} 
-	{{#style.backgroundImage}} background-image: {{style.backgroundImage}};{{/style.backgroundImage}}
+<div 
+	class="elem-{{meta.type}}{{#default.elem.class}} {{default.elem.class}}{{/default.elem.class}}"
+	data-id="{{meta.id}}"
+	style="
+		{{#style.width}}width: {{style.width}}px;{{/style.width}}
+		{{#style.height}}height: {{style.height}}px;{{/style.height}} 
+		{{#style.backgroundColor}}background-color: {{style.backgroundColor}};{{/style.backgroundColor}}
+		{{#style.backgroundImage}}background-image: {{style.backgroundImage}};{{/style.backgroundImage}}
+		{{#style.borderRadius}}border-radius: {{style.borderRadius}}px;{{/style.borderRadius}}
+		{{#style.margin}}margin: {{style.margin}}px;{{/style.margin}}
+		{{#style.padding}}padding: {{style.padding}}px;{{/style.padding}}
 ">
-	<span class="ad-elem__bg__name">{{text.elem}}</span>
+	<span class="elem__name">{{text.elem}}</span>
+	{{#settings.container}}
+	<div class="{{settings.container}}"></div>
+	{{/settings.container}}
 </div>

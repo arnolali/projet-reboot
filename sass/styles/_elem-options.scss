@@ -43,6 +43,8 @@
 		border-bottom: solid 1px $dark-grey;
 	}
 
+	.label-cell { width: 53px; }
+
 	.label {
 		display: inline-block;
 		width: 53px;
@@ -85,6 +87,30 @@
 			background-image: url(../images/ad-window-tile.png); 
 			background-repeat: repeat;
 			background-size: 8px 8px;
+		}
+	}
+
+	.align {
+		.icon {
+			width:  20px;
+			height: 20px;
+			background-image: url(../images/icons/align.png);
+			background-repeat: no-repeat;
+			background-size: 20px 120px;
+			@include border-radius(3px);
+			border: solid 1px transparent;
+
+			&:hover {
+				background-color: $light-grey;
+				border: solid 1px $dark-grey;
+			}
+
+			&.align-vertical-top { background-position: 0 0; }
+			&.align-vertical-middle { background-position: 0 -20px; }
+			&.align-vertical-bottom { background-position: 0 -40px; }
+			&.align-horizontal-left { background-position: 0 -60px; }
+			&.align-horizontal-middle { background-position: 0 -80px; }
+			&.align-horizontal-right { background-position: 0 -100px; }
 		}
 	}
 }

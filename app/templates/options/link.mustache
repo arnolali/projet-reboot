@@ -1,31 +1,23 @@
 <div class="options link-options" data-id="{{elem.meta.id}}">
-	<div class="link-theme">
-		<div class="row theme-selection table">
-			<div class="table-cell">
-				<span class="label">Theme:</span>
-			</div>
-			<div class="table-cell">
-				<span class="[ icon theme-light selected ] js-change-link-theme" data-value="light"></span>
-			</div>
-			<div class="table-cell">
-				<span class="[ icon theme-dark ] js-change-link-theme" data-value="dark"></span>
-			</div>
-			<div class="table-cell">
-				<span class="[ icon theme-free ] js-change-link-theme" data-value="free"></span>
-			</div>
-			<div class="table-cell">
-				<span class="[ icon theme-transparent ] js-change-link-theme" data-value="transparent"></span>
-			</div>
+	<div class="theme-selection row table">
+		<div class="table-cell label-cell">
+			<span class="label">Theme:</span>
 		</div>
-
-		<div class="row url table">
-			<div class="table-cell">
-				<span class="label">url:</span> 
-				<input type="text" class="[ input-dark text ] js-update-elem-setting" placeholder="http://url.com" data-prop="url" value="">
-			</div>
+		<div class="table-cell">
+			<span class="[ icon theme-light selected ] js-change-link-theme" data-value="light"></span>
 		</div>
-
-		{{> position}}
-		{{> dimensions}}
+		<div class="table-cell">
+			<span class="[ icon theme-dark ] js-change-link-theme" data-value="dark"></span>
+		</div>
+		<div class="table-cell">
+			<span class="[ icon theme-free ] js-change-link-theme" data-value="free"></span>
+		</div>
+		<div class="table-cell">
+			<span class="[ icon theme-transparent ] js-change-link-theme" data-value="transparent"></span>
+		</div>
 	</div>
+
+	{{> href}}
+	{{> position}}
+	{{> dimensions}}
 </div>

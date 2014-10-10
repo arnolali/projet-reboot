@@ -20,17 +20,4 @@ gen.prototype.updateObjImg_ = function( input, img ) {
     backgroundColor: "transparent",
     backgroundImage: img.base64
   });
-
-  obj.dom.elem.removeClass('can-drop');
-  self.updateLayerImg_( obj );
 };
-
-/*=== Update Layer Img =============================*/
-/*gen.prototype.updateLayerImg_ = function( obj ) {
-  var self = this;
-  var preview = obj.dom.layer.find('.layer__preview');
-
-  preview.css({
-    'background-image': 'url("' + obj.style.backgroundImage + '"), url("' + self.path.images + 'ad-window-tile.png")'
-  });
-};*/

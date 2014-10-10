@@ -4,14 +4,20 @@
 			"hex":  "#7FDBFF",
 			"rgba": "rgba(127,219,255,.5)"
 		},
-		"class": "can-drop empty",
+		"accept": [ "image", "link" ]
+	},
+	"default": {
+		"elem": {
+			"class": "empty"
+		}
+	},
+	"initial": {
 		"readonly": {
 			"dimensions": true
 		},
-		"accept": [ "image", "link" ]
-	},
-	"style": {
-		"width":  70,
-		"height": 70
+		"style": {
+			"width":  70,
+			"height": 70
+		}
 	}
 }
