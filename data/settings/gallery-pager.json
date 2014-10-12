@@ -8,13 +8,18 @@
 	"default": {
 		"layer": {
 			"class": "pin"
-		},
+		}
+	},
+	"initial": {
 		"style": {
+			"display": "inline-block",
+			"width": 20,
 			"height": 6,
 			"backgroundColor": "rgba(0,0,0,.75)",
-			"font-size": 6,
+			"lineHeight": 6,
+			"fontSize": 6,
 			"borderRadius": 10,
 			"padding": 5
 		}
-	},
+	}
 }

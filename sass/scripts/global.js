@@ -42,6 +42,7 @@ gen = function(defaultApp, root, defaultAd) {
   $.when( // Télécharge tous les json externes nécessaires
     $.getJSON( self.path.data + self.app.culture + "/text.json", function(r) { self.text = r; } ),
     $.get( self.path.templates + "interactivities/basic.mustache", function(r) { self.app.templates.basic = r; } ),
+    $.get( self.path.templates + "interactivities/partials/gallery-bullet.mustache", function(r) { self.app.templates.galleryBullet = r; } ),
     $.get( self.path.templates + "partials/layer.mustache", function(r) { self.app.templates.layer = r; } ),
     $.get( self.path.templates + "partials/erase.mustache", function(r) { self.app.templates.erase = r; } ),
     $.get( self.path.templates + "/options/partials/position.mustache", function(r) { self.app.templates.options.partials.position = r; } ),
@@ -519,8 +520,6 @@ gen.prototype.verifyIfParentCanReceiveChildren_ = function( item, parent ) {
     var accept = parent.data('accept');
     var type = self.app.focusedObj.meta.type;
 
-    console.log(type, accept.indexOf( type ));
-
     if( type && accept.indexOf( type ) !== -1 ) {
       parent.removeClass('no-children');
       return true;
@@ -718,15 +717,16 @@ gen.prototype.removeObjByIdFromArray_ = function( id, array ) {
 gen.prototype.updateStyleAccordingToOptionsInput_ = function( input ) {
   var self = this;
   var options = input.closest('.options');
-  var value = input.val();
-  var obj = self.getObjById_( options.data('id') );
   var prop = input.data('prop');
+  var value = self.normalizeValueForObj_( prop, input.val() );
+  var obj = self.getObjById_( options.data('id') ); 
   var linked = input.data('linked');
   var style = {};
 
+
   style[prop] = value;
   if(linked) {
-    style[linked] = value;
+    style[linked] = self.value;
   }
   self.updateStyle_( obj, style);
 };
@@ -735,7 +735,8 @@ gen.prototype.updateStyleAccordingToOptionsInput_ = function( input ) {
 gen.prototype.updateStyle_ = function( obj, style ) {
   var self = this;
 
-  console.table( [$.extend( {}, {'objet': obj.meta.name}, style)] );
+  /* Garder ligne/commentaire si dessous pour débugage */
+  //console.table( [$.extend( {}, {'objet': obj.meta.name}, style)] );
 
   self.updateObjStyle_(obj, style);
   for(var property in style) {
@@ -762,6 +763,16 @@ gen.prototype.updateObjStyle_ = function( obj, style ) {
   if( obj && style) {
     $.extend( obj.style, style);
   }
+};
+
+/*=== Normalize Value For Css ==========================================*/
+gen.prototype.normalizeValueForObj_ = function( prop, value ) {
+  var self = this;
+
+  if( $.inArray( prop, self.props.int ) !== -1 ) {
+    value = parseInt( value );
+  }
+  return value;
 };
 
 /*=== Normalize Value For Css ==========================================*/
