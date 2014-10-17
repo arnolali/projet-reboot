@@ -36,7 +36,7 @@ gen = function(defaultApp, root, defaultAd) {
   $.extend(self.ad, defaultAd);
 
   self.props = {
-    int: ["top", "left", "width", "height", "fontSize", "padding", "zIndex"] 
+    int: ["top", "left", "width", "height", "fontSize", "padding"] 
   };
 
   $.when( // Télécharge tous les json externes nécessaires
@@ -278,7 +278,8 @@ gen.prototype.initLayersSortable_ = function() {
       var obj = self.getObjById_( id );
       self.setFocus_( obj );
       self.updateParentWhenReceiveChildren_( obj );
-      self.dom.layers.find('.no-children').removeClass('.no-children')
+      self.dom.layers.find('.no-children').removeClass('.no-children');
+      self.updateLayersZindex_( self.dom.layers );
     },
     isAllowed: function(item, parent) {
       return self.verifyIfParentCanReceiveChildren_( item, parent );
@@ -646,16 +647,36 @@ gen.prototype.getElemAbsolutePosition_ = function( obj ) {
 };
 
 /*=== Update Layers Z-Index =====================================*/
-gen.prototype.updateLayersZindex = function() {
+gen.prototype.updateLayersZindex_ = function( ol ) {
   var self = this;
-  var layersArr = self.dom.layers.nestedSortable('toArray', {attribute: 'data-id'}).reverse();
-  console.log(layersArr);
+  var parent = null;
+  var liNbr = ol.children('li').length;
+  
 
-  for(var x=0; x<layersArr.length; x++) {
-    var obj = self.getObjById_( layersArr[x] );
-    if( obj ) {
-      self.updateObjStyle_( obj, {'zIndex': x} );
-      obj.dom.elem.css('zIndex', x);
+  for(var x=0; x<liNbr; x++) {
+    var li = ol.children('li')[x];
+    var id = $(li).data('id');
+    var obj = self.getObjById_( id );
+
+    if(x === 0) {
+      if( obj.meta.parent !== null ) {
+        parent = self.getObjById_( obj.meta.parent );
+      }
+    }
+
+    self.updateStyle_(obj, {
+      zIndex: liNbr - x
+    });
+
+    if( obj.elems.length ) {
+      self.updateLayersZindex_( $(li).children('ol') );
+    }
+  }
+
+  if(parent !== null) {
+    var functionName = 'update' + capitaliseFirstLetter( parent.meta.type ) + 'ChildrenPosition_';
+    if( typeof self[ functionName ] === 'function') {
+      self[ functionName ]( parent );
     }
   }
 };
@@ -779,7 +800,7 @@ gen.prototype.updateStyle_ = function( obj, style ) {
   self.updateObjStyle_(obj, style);
   for(var property in style) {
     var cssValue = self.normalizeValueForCss_( property, style[property] );
-    obj.dom.elem.css(property, cssValue );
+    obj.dom.elem.css( property, cssValue );
     self.setOptionsInputValue_( property, obj );
 
     if(property === 'backgroundImage') {

@@ -31,7 +31,7 @@ gen.prototype.updateGalleryChildrenPosition_ = function( gallery ) {
 
   for(var x=0; x<gallery.ImagesNbr; x++) {
     var obj = gallery.elems[x + skip];
-    var left = gallery.style.width * x;
+    var left = gallery.style.width * ( gallery.ImagesNbr - 1 - ( parseInt( obj.style.zIndex ) - skip ) );
 
     self.updateStyle_( obj, {
       top:  0,

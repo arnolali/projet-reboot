@@ -30,9 +30,9 @@ gen.prototype.erase_ = function( obj ) {
     if( parent && typeof self[ functionName ] === 'function') {
       self[ functionName ]( parent );
     }
-
-    self.dom.form.find('.ask-erase').remove();
   }
+
+  self.dom.form.find('.ask-erase').remove();
   
 };
 
