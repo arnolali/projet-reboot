@@ -1,5 +1,6 @@
 {
 	"align": "Align",
+	"bullet": "Bullet",
 	"cta": {
 		"image": "Drop your image here"
 	},
@@ -14,6 +15,7 @@
 	"lock": "Lock",
 	"no": "No",
 	"opacity": "Opacity",
+	"padding": "Padding",
 	"pager": "Pager",
 	"site-name": "Generator",
 	"width": "Width",

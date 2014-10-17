@@ -1249,6 +1249,22 @@ input.pixel, input.percent {
 .elem-gallery-pager .elem__name {
   display: none;
 }
+.elem-gallery-pager .pager {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 1em;
+  white-space: nowrap;
+  text-align: center;
+}
+.elem-gallery-pager .pager > span {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  margin: 0 2px;
+}
 
 .elem__dropzone {
   display: none;
@@ -1287,7 +1303,7 @@ input.pixel, input.percent {
   max-height: 100%;
   background-color: #464646;
   color: white;
-  font-size: .8rem;
+  font-size: .75rem;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -1330,31 +1346,13 @@ input.pixel, input.percent {
   background-size: contain;
   cursor: pointer;
 }
-.elem-options .link-options .icon, .elem-options .link-options .interactivities-toolbar .icon--image, .interactivities-toolbar .elem-options .link-options .icon--image, .elem-options .link-options .interactivities-toolbar .icon--link, .interactivities-toolbar .elem-options .link-options .icon--link, .elem-options .link-options .interactivities-toolbar .icon--gallery, .interactivities-toolbar .elem-options .link-options .icon--gallery {
+.elem-options .themes .icon, .elem-options .themes .interactivities-toolbar .icon--image, .interactivities-toolbar .elem-options .themes .icon--image, .elem-options .themes .interactivities-toolbar .icon--link, .interactivities-toolbar .elem-options .themes .icon--link, .elem-options .themes .interactivities-toolbar .icon--gallery, .interactivities-toolbar .elem-options .themes .icon--gallery {
+  background-size: contain, 8px 8px;
+  background-repeat: no-repeat, repeat;
   border: solid 3px #282828;
 }
-.elem-options .link-options .icon.selected, .elem-options .link-options .interactivities-toolbar .selected.icon--image, .interactivities-toolbar .elem-options .link-options .selected.icon--image, .elem-options .link-options .interactivities-toolbar .selected.icon--link, .interactivities-toolbar .elem-options .link-options .selected.icon--link, .elem-options .link-options .interactivities-toolbar .selected.icon--gallery, .interactivities-toolbar .elem-options .link-options .selected.icon--gallery {
+.elem-options .themes .icon.selected, .elem-options .themes .interactivities-toolbar .selected.icon--image, .interactivities-toolbar .elem-options .themes .selected.icon--image, .elem-options .themes .interactivities-toolbar .selected.icon--link, .interactivities-toolbar .elem-options .themes .selected.icon--link, .elem-options .themes .interactivities-toolbar .selected.icon--gallery, .interactivities-toolbar .elem-options .themes .selected.icon--gallery {
   border: solid 3px #6e7d91;
-}
-.elem-options .link-options .theme-light {
-  background-image: url(../images/icons/link-light.svg), url(../images/ad-window-tile.png);
-  background-size: contain, 8px 8px;
-  background-repeat: no-repeat, repeat;
-}
-.elem-options .link-options .theme-dark {
-  background-image: url(../images/icons/link-dark.svg), url(../images/ad-window-tile.png);
-  background-size: contain, 8px 8px;
-  background-repeat: no-repeat, repeat;
-}
-.elem-options .link-options .theme-free {
-  background-image: url(../images/icons/link-free.png), url(../images/ad-window-tile.png);
-  background-size: contain, 8px 8px;
-  background-repeat: no-repeat, repeat;
-}
-.elem-options .link-options .theme-transparent {
-  background-image: url(../images/ad-window-tile.png);
-  background-repeat: repeat;
-  background-size: 8px 8px;
 }
 .elem-options .align .icon, .elem-options .align .interactivities-toolbar .icon--image, .interactivities-toolbar .elem-options .align .icon--image, .elem-options .align .interactivities-toolbar .icon--link, .interactivities-toolbar .elem-options .align .icon--link, .elem-options .align .interactivities-toolbar .icon--gallery, .interactivities-toolbar .elem-options .align .icon--gallery {
   width: 20px;

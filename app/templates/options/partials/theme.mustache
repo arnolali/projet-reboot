@@ -1,0 +1,18 @@
+<div class="themes row table">
+	<div class="table-cell label-cell">
+		<span class="label">Theme:</span>
+	</div>
+	{{#elem.settings.themes}}
+	<div class="table-cell">
+		<span 
+			class="icon{{#selected}} selected{{/selected}} js-change-theme"
+			{{#icon}}
+			{{#colors}} data-colors="{{colors}}"{{/colors}}
+			{{#colorsSensible}} data-colorsSensible="true"{{/colorsSensible}}
+			{{#template}} data-template="{{template}}"{{/template}} 
+			{{/icon}} 
+			style="background-image: url(public/images/options/{{icon.image}}), url(public/images/ad-window-tile.png);"
+		></span>
+	</div>
+	{{/elem.settings.themes}}
+</div>

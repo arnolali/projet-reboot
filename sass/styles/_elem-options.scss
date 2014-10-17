@@ -18,7 +18,7 @@
 	max-height: 100%;
 	background-color: $medium-grey;
 	color: $white;
-	font-size: .8rem;
+	font-size: .75rem;
 	@include box-sizing(border-box);
 	border: solid 1px $dark-grey;
 
@@ -60,33 +60,14 @@
 		background-size: contain;
 		cursor: pointer;
 	}
-	
-	.link-options {
+
+	.themes {
 		.icon {
+			background-size: contain, 8px 8px;
+			background-repeat: no-repeat, repeat;
 			border: solid 3px $dark-grey;
 
 			&.selected { border: solid 3px $focus-grey; }
-		}
-
-		.theme-light { 
-			background-image: url(../images/icons/link-light.svg), url(../images/ad-window-tile.png);
-			background-size: contain, 8px 8px;
-			background-repeat: no-repeat, repeat;
-		}
-		.theme-dark { 
-			background-image: url(../images/icons/link-dark.svg), url(../images/ad-window-tile.png);
-			background-size: contain, 8px 8px;
-			background-repeat: no-repeat, repeat;
-		}
-		.theme-free { 
-			background-image: url(../images/icons/link-free.png), url(../images/ad-window-tile.png);
-			background-size: contain, 8px 8px;
-			background-repeat: no-repeat, repeat;
-		}
-		.theme-transparent { 
-			background-image: url(../images/ad-window-tile.png); 
-			background-repeat: repeat;
-			background-size: 8px 8px;
 		}
 	}
 

@@ -1,6 +1,7 @@
-gen.prototype.alignElem_ = function( position ) {
+gen.prototype.alignElem_ = function( position, obj ) {
   var self = this;
-  var obj = self.app.focusedObj;
+  var obj = obj ? obj : self.app.focusedObj;
+  console.log(obj);
   var max = {
     top:  self.ad.format.h,
     left: self.ad.format.w

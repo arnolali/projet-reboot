@@ -1,34 +1,36 @@
-gen.prototype.createGallery_ = function( obj ) {
-  var self = this;
-  
-};
-
 gen.prototype.updateGallery_ = function( obj ) {
   var self = this;
-  
 
-  console.log('update gallery', obj);
+  obj.ImagesNbr = obj.elems.length;
+  obj.reference = obj.elems[0];
+  if( obj.exist.pager ) {
+    obj.ImagesNbr--;
+    obj.reference = obj.elems[1];
+  }
 
-  self.updateGalleryDimensions_( obj, obj.elems[0] );
+  self.updateGalleryDimensions_( obj );
   self.updateGalleryChildrenPosition_( obj );
   self.updateGalleryPager_( obj );
-  
 };
 
-gen.prototype.updateGalleryDimensions_ = function( gallery, obj ) {
+gen.prototype.updateGalleryDimensions_ = function( gallery ) {
   var self = this;
 
   self.updateStyle_(gallery, {
-    width:  obj.style.width,
-    height: obj.style.height
+    width:  gallery.reference.style.width,
+    height: gallery.reference.style.height
   });
 };
 
 gen.prototype.updateGalleryChildrenPosition_ = function( gallery ) {
   var self = this;
+  var skip = 0;
+  if( gallery.exist.pager ) {
+    skip = 1;
+  }
 
-  for(var x=0; x<gallery.elems.length; x++) {
-    var obj = gallery.elems[x];
+  for(var x=0; x<gallery.ImagesNbr; x++) {
+    var obj = gallery.elems[x + skip];
     var left = gallery.style.width * x;
 
     self.updateStyle_( obj, {
@@ -43,30 +45,24 @@ gen.prototype.updateGalleryChildrenPosition_ = function( gallery ) {
   }
 };
 
-gen.prototype.updateGalleryPager_ = function( gallery ) {
+gen.prototype.updateGalleryPager_ = function( obj ) {
   var self = this;
+  var gallery = obj ? obj : self.app.focusedObj;
 
-  var imagesNbr = gallery.elems.length;
-  if(gallery.exist.pager) {
-    imagesNbr--;
-  }
-
-  if(!gallery.exist.pager && imagesNbr >= 2) {
+  if(!gallery.exist.pager && gallery.ImagesNbr >= 2) {
     self.createGalleryPager_( gallery );
     gallery.exist.pager = true;
   }
 
   if(gallery.exist.pager) {
     var pager = self.getObjById_( gallery.meta.id + '-pager', gallery.elems );
+    pager.bullets = gallery.ImagesNbr;
 
-    if(imagesNbr <= 1) {
+    if(pager.bullets <= 1) {
       gallery.exist.pager = false;
       self.erase_( pager );
     } else {
-      self.updateStyle_( pager, {
-        width: (pager.style.fontSize + 4) * imagesNbr
-      });
-      self.updateGalleryPagerBullets_( pager, imagesNbr );
+      self.updateGalleryPagerTheme_( pager );
     }
   }
 };
@@ -83,14 +79,46 @@ gen.prototype.createGalleryPager_ = function( gallery ) {
     }
   };
 
-  self.createElem_( obj );
+  self.createElem_( obj, {
+    insert: "prepend",
+    callback: "setGalleryPagerDefaultPosition_"
+  });
 };
 
-gen.prototype.updateGalleryPagerBullets_ = function( pager, nbr ) {
+gen.prototype.setGalleryPagerDefaultPosition_ = function( obj ) {
   var self = this;
-  var html = "";
-  for(var x=0; x<nbr; x++) {
-    html += Mustache.render( self.app.templates.galleryBullet);
+  setTimeout(function() {
+    self.alignElem_( 'vertical-bottom', obj);
+    self.alignElem_( 'horizontal-middle', obj);
+  }, 0)
+  
+};
+
+gen.prototype.updateGalleryPagerTheme_ = function( pager ) {
+  var self = this;
+  self.updateStyle_( pager, {
+    width: (pager.style.fontSize + 4) * pager.bullets,
+    height: pager.style.fontSize
+  });
+
+  var constructor = {
+    height: pager.style.height,
+    padding: pager.style.padding,
+    radius: (pager.style.height + pager.style.padding * 2) / 2,
+    bullets: []
+  };
+
+  for(var x=0; x<pager.bullets; x++) {
+    var bullet = {
+      size: pager.style.fontSize,
+      color: pager.theme.colors.no1
+    }
+    if(pager.selected === x) {
+      bullet.color = pager.theme.colors.no0;
+    }
+    constructor.bullets.push( bullet );
   }
-  pager.dom.elem.html( html );
+
+  var html = Mustache.render( self.app.templates[pager.theme.template], constructor );
+  pager.dom.elem.find('.elem__container').html( html );
 };

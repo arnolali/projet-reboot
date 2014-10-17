@@ -1,4 +1,38 @@
 <div class="options gallery-pager-options" data-id="{{elem.meta.id}}">
+	{{> theme}}
+	
+	<div class="pager-options row table{{#elem.readonly.pager-options}} disabled{{/elem.readonly.pager-options}}">
+		<div class="table-cell label-cell">
+			<span class="label">{{text.bullet}}:</span> 
+		</div>
+		<div class="table-cell">
+			<input 
+				type="number" 
+				min="6" 
+				max="50"
+				class="[ input-dark pixel ] js-update-elem-style" 
+				data-prop="fontSize" 
+				data-callback="updateGalleryPagerTheme_"
+				value="{{elem.style.fontSize}}"
+			>
+		</div>
+
+		<div class="table-cell label-cell">
+			<span class="label">{{text.padding}}:</span> 
+		</div>
+		<div class="table-cell">
+			<input 
+				type="number" 
+				min="0" 
+				max="50"
+				class="[ input-dark pixel ] js-update-elem-style" 
+				data-prop="padding" 
+				data-callback="updateGalleryPagerTheme_"
+				value="{{elem.style.padding}}"
+			>
+		</div>
+	</div>
+
 	{{> position}}
 	{{> dimensions}}
 </div>

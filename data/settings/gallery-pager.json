@@ -3,7 +3,44 @@
 		"color": {
 			"hex":  "#B2FFDD",
 			"rgba": "rgba(178,255,221,.5)"
-		}
+		},
+		"container": "elem__container",
+		"themes": [
+			{
+				"selected": true,
+				"icon": {
+					"template": "galleryPager",
+					"image": "pager-redaction.png",
+					"colors": ["#ffffff", "rgba(255,255,255,.75)"],
+					"colorsSensible": false
+				}
+			},
+			{
+				"selected": false,
+				"icon": {
+					"template": "galleryPagerTransparent",
+					"image": "pager-no-background.png",
+					"colors": ["#ffffff", "rgba(255,255,255,.75)"],
+					"colorsSensible": false
+				}
+			},
+			{
+				"selected": false,
+				"icon": {
+					"template": "galleryPager",
+					"image": "pager-free-redaction.png",
+					"colorsSensible": true
+				}
+			},
+			{
+				"selected": false,
+				"icon": {
+					"template": "galleryPagerTransparent",
+					"image": "pager-free-no-background.png",
+					"colorsSensible": true
+				}
+			}
+		]
 	},
 	"default": {
 		"layer": {
@@ -15,11 +52,23 @@
 			"display": "inline-block",
 			"width": 20,
 			"height": 6,
-			"backgroundColor": "rgba(0,0,0,.75)",
 			"lineHeight": 6,
 			"fontSize": 6,
-			"borderRadius": 10,
-			"padding": 5
+			"borderRadius": 8,
+			"padding": 5,
+			"zIndex": 1
+		},
+		"theme": {
+			"template": "galleryPager",
+			"colors": {
+				"no0": "#ffffff",
+				"no1": "rgba(255,255,255,.75)"
+			},
+			"colorsSensible": false
+		},
+		"selected": 0,
+		"readonly": {
+			"dimensions": true
 		}
 	}
 }

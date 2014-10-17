@@ -36,18 +36,20 @@ gen = function(defaultApp, root, defaultAd) {
   $.extend(self.ad, defaultAd);
 
   self.props = {
-    int: ["top", "left", "width", "height", "zIndex"] 
+    int: ["top", "left", "width", "height", "fontSize", "padding", "zIndex"] 
   };
 
   $.when( // Télécharge tous les json externes nécessaires
     $.getJSON( self.path.data + self.app.culture + "/text.json", function(r) { self.text = r; } ),
     $.get( self.path.templates + "interactivities/basic.mustache", function(r) { self.app.templates.basic = r; } ),
-    $.get( self.path.templates + "interactivities/partials/gallery-bullet.mustache", function(r) { self.app.templates.galleryBullet = r; } ),
+    $.get( self.path.templates + "interactivities/partials/gallery-pager.mustache", function(r) { self.app.templates.galleryPager = r; } ),
+    $.get( self.path.templates + "interactivities/partials/gallery-pager-transparent.mustache", function(r) { self.app.templates.galleryPagerTransparent = r; } ),
     $.get( self.path.templates + "partials/layer.mustache", function(r) { self.app.templates.layer = r; } ),
     $.get( self.path.templates + "partials/erase.mustache", function(r) { self.app.templates.erase = r; } ),
     $.get( self.path.templates + "/options/partials/position.mustache", function(r) { self.app.templates.options.partials.position = r; } ),
     $.get( self.path.templates + "/options/partials/dimensions.mustache", function(r) { self.app.templates.options.partials.dimensions = r; } ),
     $.get( self.path.templates + "/options/partials/href.mustache", function(r) { self.app.templates.options.partials.href = r; } ),
+    $.get( self.path.templates + "/options/partials/theme.mustache", function(r) { self.app.templates.options.partials.theme = r; } ),
     $.get( self.path.templates + "/icons/link.mustache", function(r) { self.app.templates.icons.link = r; } )
   ).then(function() { // Ensuite initialise la page
     //--- functions -----------------
@@ -100,12 +102,12 @@ gen.prototype.bindEvents_ = function() {
     self.updateKeyPressed_();
   });
 
-  $(document).on('dragover', function(e) {
+  $(document).on('dragover', function() {
     clearTimeout(window.timer);
     self.detectDragOver_( true );
   });
 
-  $(document).on('dragleave drop', function(e) {
+  $(document).on('dragleave drop', function() {
     window.timer = setTimeout(function() {
       self.detectDragOver_( false );
     }, 200);
@@ -161,8 +163,12 @@ gen.prototype.bindEvents_ = function() {
     self.getImgFormInput_( $(this) );
   });
 
-  self.dom.elemOptions.on('click', '.js-change-link-theme', function() {
+  /*self.dom.elemOptions.on('click', '.js-change-link-theme', function() {
     self.updateLinkTheme_( $(this) );
+  });*/
+
+  self.dom.elemOptions.on('click', '.js-change-theme', function() {
+    self.updateThemeIcon_( $(this) );
   });
 
   self.dom.elemOptions.on('change', '.js-update-elem-style', function() {
@@ -183,13 +189,7 @@ gen.prototype.colorsFlip_ = function() {
   var input = self.dom.colors.find('.input-color');
   input.toggleClass('front back');
 
-  if(self.app.focusedObj !== null) {
-    var functionName = 'update' + capitaliseFirstLetter( self.app.focusedObj.meta.type ) + 'Colors_';
-
-    if( typeof self[ functionName ] === 'function') {
-      self[ functionName ]( self.app.focusedObj );
-    } 
-  }
+  self.updateColorsRelated_(); 
 };
 
 /*=== Init Color Input ==========================================*/
@@ -202,15 +202,28 @@ gen.prototype.initColorInput_ = function( interactivity ) {
       $(el).css('background-color', '#' + hex);
       $(el).colpickHide();
 
-      if(self.app.focusedObj !== null) {
-        var functionName = 'update' + capitaliseFirstLetter( self.app.focusedObj.meta.type ) + 'Colors_';
-
-        if( typeof self[ functionName ] === 'function') {
-          self[ functionName ]( self.app.focusedObj );
-        } 
-      }
+      self.updateColorsRelated_();
     },
   });
+};
+
+gen.prototype.updateColorsRelated_ = function() {
+  var self = this;
+  if( self.app.focusedObj.theme && self.app.focusedObj.theme.colorsSensible ) {
+    var colors = self.getColors_();
+    self.updateTheme_({
+      colors: colors
+    });
+  } 
+};
+
+gen.prototype.getColors_ = function() {
+  var self = this;
+  var colors = {
+    no0: self.dom.colors.find('.front').css('background-color'), 
+    no1: self.dom.colors.find('.back').css('background-color')
+  };
+  return colors;
 };
 
 gen.prototype.closePopup_ = function( popup ) {
@@ -369,11 +382,17 @@ gen.prototype.createElemByType_ = function( btn ) {
 };
 
 /*=== Create Elem ==========================================*/
-gen.prototype.createElem_ = function( presets ) {
+gen.prototype.createElem_ = function( presets, options ) {
   var self = this;
-  var obj = self.createElemObj_( presets );
+  var settings = {
+    insert: "append"
+  };
+  if(options) {
+    $.extend(settings, options);
+  };
+  var obj = self.createElemObj_( presets, settings );
 
-  self.setElemHtml_( obj );
+  self.setElemHtml_( obj, settings );
   self.setLayerHtml_( obj );
   self.setOptionsHtml_( obj );
   self.setFocus_( obj );
@@ -385,7 +404,7 @@ gen.prototype.createElem_ = function( presets ) {
 };
 
 /*=== Create Elem Obj ==========================================*/
-gen.prototype.createElemObj_ = function( presets ) {
+gen.prototype.createElemObj_ = function( presets, settings ) {
   var self = this;
   var obj = {
     meta: {
@@ -425,9 +444,18 @@ gen.prototype.createElemObj_ = function( presets ) {
   if( obj.meta.parent !== null ) {
     parent = self.getObjById_( obj.meta.parent );
   }
-  parent.elems.push( obj );
+
+  if( settings.insert === "append" ) {
+    parent.elems.push( obj );
+  } else {
+    parent.elems.unshift( obj );
+  }
 
   self.updateIdPerInteractivity_( obj.meta.type );
+
+  if( settings.callback ) {
+    self[settings.callback]( obj );
+  }
 
   return obj;
 };
@@ -439,7 +467,7 @@ gen.prototype.updateIdPerInteractivity_ = function( interactivity ) {
 };
 
 /*=== Set Elem HTML ==========================================*/
-gen.prototype.setElemHtml_ = function( obj ) {
+gen.prototype.setElemHtml_ = function( obj, settings ) {
   var self = this;
   var template = Mustache.render( self.app.templates.basic, obj );
   var html = $(template).append( self.app.templates[ obj.meta.type ] );
@@ -448,8 +476,12 @@ gen.prototype.setElemHtml_ = function( obj ) {
     parent = self.getObjById_( obj.meta.parent );
     parent = parent.dom.elem;
   }
+  if( settings.insert === "append" ) {
+    parent.append( html );
+  } else {
+    parent.prepend( html );
+  }
   
-  parent.append( html );
   obj.dom.elem = parent.find('[data-id="' + obj.meta.id + '"]');
 
   self.initAdElemDrag_( obj );
@@ -503,6 +535,7 @@ gen.prototype.setOptionsHtml_ = function( obj ) {
   };
 
   var html = Mustache.render( self.app.templates.options[ obj.meta.type ], construct, {
+    theme: self.app.templates.options.partials.theme,
     align: self.app.templates.options.partials.align,
     position: self.app.templates.options.partials.position,
     dimensions: self.app.templates.options.partials.dimensions
@@ -721,6 +754,7 @@ gen.prototype.updateStyleAccordingToOptionsInput_ = function( input ) {
   var value = self.normalizeValueForObj_( prop, input.val() );
   var obj = self.getObjById_( options.data('id') ); 
   var linked = input.data('linked');
+  var callback = input.data('callback');
   var style = {};
 
 
@@ -729,6 +763,10 @@ gen.prototype.updateStyleAccordingToOptionsInput_ = function( input ) {
     style[linked] = self.value;
   }
   self.updateStyle_( obj, style);
+
+  if(callback) {
+    self[callback]( obj );
+  }
 };
 
 /*=== Update Prop =============================*/
@@ -816,12 +854,23 @@ gen.prototype.updateReadonly_ = function( props, obj ) {
   }
 };
 
+gen.prototype.colorsArraytoObj_ = function( arr ) {
+  var self = this;
+  var obj = {}
+
+  for(var x=0; x<arr.length; x++) {
+    obj['no' + x] = arr[x];
+  }
+
+  return obj;
+}
+
 //@prepros-append partials/shortcuts.js
 //@prepros-append partials/erase.js
 //@prepros-append partials/align.js
 //@prepros-append partials/lock.js
 //@prepros-append partials/opacity.js
+//@prepros-append partials/theme.js
 
 //@prepros-append interactivities/image.js
-//@prepros-append interactivities/link.js
 //@prepros-append interactivities/gallery.js

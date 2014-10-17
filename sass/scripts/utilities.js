@@ -59,7 +59,16 @@ function inputContainImg( input ) {
     }
 };
 
-function svgToBase64 ( svg ) {
+function svgToBase64( svg ) {
     var base64 = 'data:image/svg+xml;base64,' + btoa( svg );
     return base64;
+}
+
+function hyphensToCamelCase( string ) {
+    var camelCased = string.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+    return camelCased;
+}
+
+function colorsStrToArray( string ) {
+    return string.split(/(?:,(?=#)|,(?=r))+/);
 }

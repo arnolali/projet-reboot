@@ -1,5 +1,6 @@
 {
 	"align": "Aligner",
+	"bullet": "Pastille",
 	"cta": {
 		"image": "Glisser votre image ici"
 	},
@@ -14,6 +15,7 @@
 	"lock": "Verrou",
 	"no": "Non",
 	"opacity": "Opacité",
+	"padding": "Gouttière",
 	"pager": "Pagination",
 	"site-name": "Générateur",
 	"width": "Largeur",
