@@ -11,7 +11,7 @@
 				"icon": {
 					"template": "galleryPager",
 					"image": "pager-redaction.png",
-					"colors": ["#ffffff", "rgba(255,255,255,.75)"],
+					"colors": ["#ffffff", "rgba(255,255,255,.75)", "rgba(0,0,0,.75)"],
 					"colorsSensible": false
 				}
 			},
@@ -20,7 +20,7 @@
 				"icon": {
 					"template": "galleryPagerTransparent",
 					"image": "pager-no-background.png",
-					"colors": ["#ffffff", "rgba(255,255,255,.75)"],
+					"colors": ["#ffffff", "rgba(255,255,255,.75)", "rgba(0,0,0,0)"],
 					"colorsSensible": false
 				}
 			},
@@ -29,6 +29,7 @@
 				"icon": {
 					"template": "galleryPager",
 					"image": "pager-free-redaction.png",
+					"colors": ["#ffffff", "#000000", "rgba(0,0,0,.75)"],
 					"colorsSensible": true
 				}
 			},
@@ -37,14 +38,13 @@
 				"icon": {
 					"template": "galleryPagerTransparent",
 					"image": "pager-free-no-background.png",
+					"colors": ["#ffffff", "#000000", "rgba(0,0,0,0)"],
 					"colorsSensible": true
 				}
 			}
-		]
-	},
-	"default": {
+		],
 		"layer": {
-			"class": "pin"
+			"preview": "galleryPager"
 		}
 	},
 	"initial": {
@@ -62,9 +62,13 @@
 			"template": "galleryPager",
 			"colors": {
 				"no0": "#ffffff",
-				"no1": "rgba(255,255,255,.75)"
+				"no1": "rgba(255,255,255,.75)",
+				"no2": "rgba(0,0,0,.75)"
 			},
 			"colorsSensible": false
+		},
+		"layer": {
+			"class": "pin"
 		},
 		"selected": 0,
 		"readonly": {

@@ -52,7 +52,7 @@ gen.prototype.updateTheme_ = function( theme, obj ) {
 /*=== Update Obj Theme =============================================*/
 gen.prototype.updateObjTheme_ = function( obj, theme ) {
   var self = this;
-  $.extend( obj.theme, theme);
+  $.extend( obj.theme, theme, true );
 };
 
 /*=== Update Elem Theme  ==========================================*/

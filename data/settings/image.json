@@ -4,12 +4,7 @@
 			"hex":  "#7FDBFF",
 			"rgba": "rgba(127,219,255,.5)"
 		},
-		"accept": [ "image", "link" ]
-	},
-	"default": {
-		"elem": {
-			"class": "empty"
-		}
+		"layer": {}
 	},
 	"initial": {
 		"readonly": {
@@ -18,6 +13,14 @@
 		"style": {
 			"width":  70,
 			"height": 70
+		},
+		"elem": {
+			"class": "empty"
+		}
+	},
+	"populate": {
+		"data": {
+			"accept": "image link"
 		}
 	}
 }

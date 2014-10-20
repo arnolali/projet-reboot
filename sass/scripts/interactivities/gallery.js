@@ -1,64 +1,86 @@
+/*=== Update Gallery ==============================================*/
 gen.prototype.updateGallery_ = function( obj ) {
   var self = this;
 
-  obj.ImagesNbr = obj.elems.length;
-  obj.reference = obj.elems[0];
-  if( obj.exist.pager ) {
-    obj.ImagesNbr--;
-    obj.reference = obj.elems[1];
-  }
-
-  self.updateGalleryDimensions_( obj );
-  self.updateGalleryChildrenPosition_( obj );
+  self.updateGalleryObj_( obj )
   self.updateGalleryPager_( obj );
+  self.updateGalleryDimensions_( obj );
+  self.updateGalleryChildren_( obj );
+};
+/*=== Update Gallery Obj ==============================================*/
+gen.prototype.updateGalleryObj_ = function( gallery ) {
+  var self = this;
+
+  console.log('teer', gallery.elems[0]);
+
+  gallery.ImagesNbr = gallery.elems.length;
+  gallery.reference = gallery.elems[0];
+
+  if( gallery.exist.pager ) {
+    gallery.ImagesNbr--;
+    gallery.reference = gallery.elems[1];
+  }
 };
 
+/*=== Update Gallery Dimensions ==============================================*/
 gen.prototype.updateGalleryDimensions_ = function( gallery ) {
   var self = this;
 
-  self.updateStyle_(gallery, {
-    width:  gallery.reference.style.width,
-    height: gallery.reference.style.height
-  });
+  console.log( gallery );
+
+  setTimeout(function() {
+    self.updateStyle_(gallery, {
+      width:  gallery.reference.style.width,
+      height: gallery.reference.style.height
+    });
+  }, 0)
+  
 };
 
-gen.prototype.updateGalleryChildrenPosition_ = function( gallery ) {
+/*=== Update Gallery Children ==============================================*/
+gen.prototype.updateGalleryChildren_ = function( gallery ) {
   var self = this;
   var skip = 0;
   if( gallery.exist.pager ) {
     skip = 1;
   }
 
-  for(var x=0; x<gallery.ImagesNbr; x++) {
-    var obj = gallery.elems[x + skip];
-    var left = gallery.style.width * ( gallery.ImagesNbr - 1 - ( parseInt( obj.style.zIndex ) - skip ) );
+  setTimeout(function() {
+    for(var x=0; x<gallery.ImagesNbr; x++) {
+      var obj = gallery.elems[x + skip];
+      var order = gallery.ImagesNbr - parseInt( obj.style.zIndex );
+      var left = gallery.style.width * order;
 
-    self.updateStyle_( obj, {
-      top:  0,
-      left: left
-    });
+      console.log( gallery.elems[x + skip].meta.name, parseInt( obj.style.zIndex )  );
 
-    if(obj.meta.type === 'image') {
-      self.updateReadonly_( {position: true}, obj );
-      obj.dom.elem.draggable( 'disable' );
+      self.updateStyle_( obj, {
+        top:  0,
+        left: left
+      });
+
+      if( obj.meta.type === 'image' ) {
+        self.updateReadonly_( {position: true}, obj );
+        obj.dom.elem.draggable( 'disable' );
+      }
     }
-  }
+  }, 0)
 };
 
+/*=== Update Gallery Pager ==============================================*/
 gen.prototype.updateGalleryPager_ = function( obj ) {
   var self = this;
   var gallery = obj ? obj : self.app.focusedObj;
 
-  if(!gallery.exist.pager && gallery.ImagesNbr >= 2) {
+  if( !gallery.exist.pager && gallery.ImagesNbr >= 2 ) {
     self.createGalleryPager_( gallery );
     gallery.exist.pager = true;
   }
 
-  if(gallery.exist.pager) {
+  if( gallery.exist.pager ) {
     var pager = self.getObjById_( gallery.meta.id + '-pager', gallery.elems );
     pager.bullets = gallery.ImagesNbr;
 
-    if(pager.bullets <= 1) {
+    if( pager.bullets <= 1 ) {
       gallery.exist.pager = false;
       self.erase_( pager );
     } else {
@@ -67,6 +89,7 @@ gen.prototype.updateGalleryPager_ = function( obj ) {
   }
 };
 
+/*=== Create Gallery Pager ==============================================*/
 gen.prototype.createGalleryPager_ = function( gallery ) {
   var self = this;
 
@@ -85,6 +108,7 @@ gen.prototype.createGalleryPager_ = function( gallery ) {
   });
 };
 
+/*=== Set Gallery Pager Default Position ==============================================*/
 gen.prototype.setGalleryPagerDefaultPosition_ = function( obj ) {
   var self = this;
   setTimeout(function() {
@@ -94,8 +118,14 @@ gen.prototype.setGalleryPagerDefaultPosition_ = function( obj ) {
   
 };
 
+/*=== Update Gallery Pager Theme ==============================================*/
 gen.prototype.updateGalleryPagerTheme_ = function( pager ) {
   var self = this;
+
+  if(pager.theme.colorsSensible) {
+    $.extend( pager.theme.colors, self.getColors_() );
+  };
+
   self.updateStyle_( pager, {
     width: (pager.style.fontSize + 4) * pager.bullets,
     height: pager.style.fontSize
@@ -119,6 +149,17 @@ gen.prototype.updateGalleryPagerTheme_ = function( pager ) {
     constructor.bullets.push( bullet );
   }
 
+  self.updateLayerPreview_( pager );
+
   var html = Mustache.render( self.app.templates[pager.theme.template], constructor );
   pager.dom.elem.find('.elem__container').html( html );
+};
+
+/*=== Update Gallery Children When Leaving ==============================================*/
+gen.prototype.updateGalleryChildrenWhenLeaving_ = function( obj ) {
+  var self = this;
+
+  console.log('updateGalleryChildrenWhenLeaving_', obj.meta.name);
+  self.updateReadonly_( {position: false}, obj );
+  obj.dom.elem.draggable( 'enable' );
 };

@@ -19,7 +19,8 @@ gen = function(defaultApp, root, defaultAd) {
       options: {
         partials: {}
       },
-      icons: {}
+      icons: {},
+      previews: {}
     },
     idPer: {},
     dragover: false,
@@ -44,6 +45,7 @@ gen = function(defaultApp, root, defaultAd) {
     $.get( self.path.templates + "interactivities/basic.mustache", function(r) { self.app.templates.basic = r; } ),
     $.get( self.path.templates + "interactivities/partials/gallery-pager.mustache", function(r) { self.app.templates.galleryPager = r; } ),
     $.get( self.path.templates + "interactivities/partials/gallery-pager-transparent.mustache", function(r) { self.app.templates.galleryPagerTransparent = r; } ),
+    $.get( self.path.templates + "previews/gallery-pager.mustache", function(r) { self.app.templates.previews.galleryPager = r; } ),
     $.get( self.path.templates + "partials/layer.mustache", function(r) { self.app.templates.layer = r; } ),
     $.get( self.path.templates + "partials/erase.mustache", function(r) { self.app.templates.erase = r; } ),
     $.get( self.path.templates + "/options/partials/position.mustache", function(r) { self.app.templates.options.partials.position = r; } ),
@@ -163,10 +165,6 @@ gen.prototype.bindEvents_ = function() {
     self.getImgFormInput_( $(this) );
   });
 
-  /*self.dom.elemOptions.on('click', '.js-change-link-theme', function() {
-    self.updateLinkTheme_( $(this) );
-  });*/
-
   self.dom.elemOptions.on('click', '.js-change-theme', function() {
     self.updateThemeIcon_( $(this) );
   });
@@ -182,48 +180,6 @@ gen.prototype.bindEvents_ = function() {
   self.dom.elemOptions.on('click', '.js-align-elem', function() {
     self.alignElem_( $(this).data('position') );
   });
-};
-
-gen.prototype.colorsFlip_ = function() {
-  var self = this;
-  var input = self.dom.colors.find('.input-color');
-  input.toggleClass('front back');
-
-  self.updateColorsRelated_(); 
-};
-
-/*=== Init Color Input ==========================================*/
-gen.prototype.initColorInput_ = function( interactivity ) {
-  var self = this;
-  $('.input-color').colpick({
-    layout:'rgbhsbhex',
-    color:'ffffff',
-    onSubmit:function(hsb,hex,rgb,el) {
-      $(el).css('background-color', '#' + hex);
-      $(el).colpickHide();
-
-      self.updateColorsRelated_();
-    },
-  });
-};
-
-gen.prototype.updateColorsRelated_ = function() {
-  var self = this;
-  if( self.app.focusedObj.theme && self.app.focusedObj.theme.colorsSensible ) {
-    var colors = self.getColors_();
-    self.updateTheme_({
-      colors: colors
-    });
-  } 
-};
-
-gen.prototype.getColors_ = function() {
-  var self = this;
-  var colors = {
-    no0: self.dom.colors.find('.front').css('background-color'), 
-    no1: self.dom.colors.find('.back').css('background-color')
-  };
-  return colors;
 };
 
 gen.prototype.closePopup_ = function( popup ) {
@@ -260,31 +216,6 @@ gen.prototype.detectDragOver_ = function( e ) {
     self.app.dragover = false;
     self.dom.b.removeClass('dragover');
   }
-};
-
-/*=== Init Layer Sortable ==========================================*/
-gen.prototype.initLayersSortable_ = function() {
-  var self = this;
-  self.dom.layers.nestedSortable({
-    items: 'li:not(.pin)',
-    toleranceElement: '> div',
-    opacity: 0.5,
-    revert: 0,
-    tolerance: 'pointer',
-    placeholder: 'layer__placeholder',
-    doNotClear: true,
-    stop: function(event, ui) {
-      var id = ui.item.data( 'id' );
-      var obj = self.getObjById_( id );
-      self.setFocus_( obj );
-      self.updateParentWhenReceiveChildren_( obj );
-      self.dom.layers.find('.no-children').removeClass('.no-children');
-      self.updateLayersZindex_( self.dom.layers );
-    },
-    isAllowed: function(item, parent) {
-      return self.verifyIfParentCanReceiveChildren_( item, parent );
-    }
-  });
 };
 
 /*=== Init Interactivity Related ==========================================*/
@@ -513,20 +444,6 @@ gen.prototype.initAdElemDrag_ = function( obj ) {
   });
 };
 
-/*=== Set Layer HTML ==========================================*/
-gen.prototype.setLayerHtml_ = function( obj ) {
-  var self = this;
-  var html = Mustache.render( self.app.templates.layer, obj );
-  var parent = obj.meta.parent === null ? self.dom.layers : self.getObjById_( obj.meta.parent );
-  if( obj.meta.parent !== null ) {
-    parent = parent.dom.layer.children('ol');
-  }
-
-  parent.prepend( html );
-  obj.dom.layer = parent.find('[data-id="' + obj.meta.id + '"]');
-  self.dom.layers.sortable( 'refresh' );
-};
-
 /*=== Set Options HTML ==========================================*/
 gen.prototype.setOptionsHtml_ = function( obj ) {
   var self = this;
@@ -551,10 +468,13 @@ gen.prototype.verifyIfParentCanReceiveChildren_ = function( item, parent ) {
   var self = this;
 
   if(parent) {
-    var accept = parent.data('accept');
     var type = self.app.focusedObj.meta.type;
+    var accept = null;
+    if(typeof parent.data( 'accept' ) !== 'undefined') {
+      accept = parent.data( 'accept' );
+    }
 
-    if( type && accept.indexOf( type ) !== -1 ) {
+    if( type && accept && accept.indexOf( type ) !== -1 ) {
       parent.removeClass('no-children');
       return true;
     } else {
@@ -563,49 +483,6 @@ gen.prototype.verifyIfParentCanReceiveChildren_ = function( item, parent ) {
     }
   } else {
     return true;
-  }
-};
-
-/*=== Update Parent When Receive Children ======================================*/
-gen.prototype.updateParentWhenReceiveChildren_ = function( obj ) {
-  var self = this;
-
-  if( obj ) {
-    var id = obj.dom.layer.parent().closest( 'li' ).data( 'id' );
-  
-    if(id) {
-      var parent = self.getObjById_( id );
-
-      if(obj.meta.parent !== parent.meta.id) {
-        obj.meta.parent = parent.meta.id;
-
-        self.removeObjByIdFromArray_( obj.meta.id );
-        parent.elems.push( obj );
-
-        self.updatePositionAccordingToParent_( obj );
-        if(parent.settings.container) {
-          parent.dom.elem.children( '.' + parent.settings.container ).append( obj.dom.elem );
-        } else {
-          parent.dom.elem.append( obj.dom.elem );
-        }
-
-        var functionName = 'update' + capitaliseFirstLetter( parent.meta.type ) + '_';
-        if( typeof self[ functionName ] === 'function') {
-          self[ functionName ]( parent );
-        } 
-      }
-    } else {
-      if(obj.meta.parent !== null) {
-        obj.meta.parent = null;
-
-        self.removeObjByIdFromArray_( obj.meta.id );
-        self.ad.elems.push( obj );
-        self.updateReadonly_( obj.initial.readonly, obj );
-
-        self.updatePositionAccordingToParent_( obj );
-        self.dom.adContent.append( obj.dom.elem );
-      }
-    }
   }
 };
 
@@ -644,41 +521,6 @@ gen.prototype.getElemAbsolutePosition_ = function( obj ) {
     left: obj.dom.elem.offset().left - self.dom.adContent.offset().left
   };
   return position;
-};
-
-/*=== Update Layers Z-Index =====================================*/
-gen.prototype.updateLayersZindex_ = function( ol ) {
-  var self = this;
-  var parent = null;
-  var liNbr = ol.children('li').length;
-  
-
-  for(var x=0; x<liNbr; x++) {
-    var li = ol.children('li')[x];
-    var id = $(li).data('id');
-    var obj = self.getObjById_( id );
-
-    if(x === 0) {
-      if( obj.meta.parent !== null ) {
-        parent = self.getObjById_( obj.meta.parent );
-      }
-    }
-
-    self.updateStyle_(obj, {
-      zIndex: liNbr - x
-    });
-
-    if( obj.elems.length ) {
-      self.updateLayersZindex_( $(li).children('ol') );
-    }
-  }
-
-  if(parent !== null) {
-    var functionName = 'update' + capitaliseFirstLetter( parent.meta.type ) + 'ChildrenPosition_';
-    if( typeof self[ functionName ] === 'function') {
-      self[ functionName ]( parent );
-    }
-  }
 };
 
 /*=== Toggle Visibility =====================================*/
@@ -721,15 +563,6 @@ gen.prototype.setFocus_ = function( obj ) {
   self.updateEraseIcon_();
   self.updateLockIcon_();
   self.updateOpacityValue_();
-};
-
-/*=== Update Layer Focus =====================================*/
-gen.prototype.updateLayerFocus_ = function( layer ) {
-  var self = this;
-  var id = layer.data( "id" );
-  var obj = self.getObjById_( id );
-
-  self.setFocus_( obj );
 };
 
 /*=== Get Obj By Id =============================*/
@@ -809,13 +642,6 @@ gen.prototype.updateStyle_ = function( obj, style ) {
   }
 };
 
-gen.prototype.updateLayerPreview_ = function( obj ) {
-  var self = this;
-  obj.dom.layer.find('.layer__preview').css({
-    'background-image': 'url("' + obj.style.backgroundImage + '"), url("' + self.path.images + 'ad-window-tile.png")'
-  });
-}
-
 /*=== Update Obj Style =============================*/
 gen.prototype.updateObjStyle_ = function( obj, style ) {
   var self = this;
@@ -851,9 +677,11 @@ gen.prototype.setOptionsInputValue_ = function( prop, obj ) {
   var self = this;
   obj = typeof obj !== 'undefined' ? obj : self.app.focusedObj;
 
-  var input = obj.dom.options.find( '[data-prop="' + prop + '"]' );
-  if(input) {
-    input.val( obj.style[prop] );
+  if( obj.dom.options ) {
+    var input = obj.dom.options.find( '[data-prop="' + prop + '"]' );
+    if(input) {
+      input.val( obj.style[prop] );
+    }
   }
 };
 
@@ -875,22 +703,13 @@ gen.prototype.updateReadonly_ = function( props, obj ) {
   }
 };
 
-gen.prototype.colorsArraytoObj_ = function( arr ) {
-  var self = this;
-  var obj = {}
-
-  for(var x=0; x<arr.length; x++) {
-    obj['no' + x] = arr[x];
-  }
-
-  return obj;
-}
-
 //@prepros-append partials/shortcuts.js
+//@prepros-append partials/layers.js
 //@prepros-append partials/erase.js
 //@prepros-append partials/align.js
 //@prepros-append partials/lock.js
 //@prepros-append partials/opacity.js
+//@prepros-append partials/colors.js
 //@prepros-append partials/theme.js
 
 //@prepros-append interactivities/image.js

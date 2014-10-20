@@ -1,9 +1,9 @@
 <li 
-	class="layer{{#default.layer.class}} {{default.layer.class}}{{/default.layer.class}}" 
+	class="layer{{#layer.class}} {{layer.class}}{{/layer.class}}" 
 	id="{{meta.id}}"
 	data-id="{{meta.id}}" 
 	data-type="{{meta.type}}" 
-	data-accept="{{#settings.accept}}{{.}} {{/settings.accept}}"
+	{{#data.accept}}data-accept="{{data.accept}}"{{/data.accept}}
 >
 	<div class="layer__wrapper">
 		<div class="layer__visibility js-toggle-layer-visibility" style="background-color: {{settings.color.rgba}}"></div>

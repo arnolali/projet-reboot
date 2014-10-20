@@ -12,6 +12,9 @@ gen.prototype.updateObjImg_ = function( input, img ) {
   var elem = input.closest('[data-id]');
   var obj = self.getObjById_( elem.data('id') );
 
+  $.extend( obj, obj.populate, true );
+  self.updateLayerDataAttr_( obj );
+
   elem.removeClass('empty');
 
   self.updateStyle_( obj, {

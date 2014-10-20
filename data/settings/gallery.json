@@ -4,18 +4,16 @@
 			"hex":  "#3D9970",
 			"rgba": "rgba(61,153,112,.5)"
 		},
-		"accept": [ "image" ],
-		"container": "elem__container"
-	},
-	"default": {
-		"elem": {
-			"class": "empty"
-		}
+		"container": "elem__container",
+		"layer": {}
 	},
 	"initial": {
 		"style": {
 			"width":  70,
 			"height": 70
+		},
+		"data": {
+			"accept": "image"
 		},
 		"exist": {
 			"pager": false,
@@ -23,6 +21,9 @@
 		},
 		"readonly": {
 			"dimensions": true
+		},
+		"elem": {
+			"class": "empty"
 		}
 	}
 }

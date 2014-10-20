@@ -11,8 +11,8 @@
 		"linked": {
 			"dimensions": true
 		},
+		"layer": {},
 		"url": "",
-		"accept": [],
 		"themes": [
 			{
 				"selected": true,
@@ -44,11 +44,6 @@
 				"selected": false
 			}
 		]
-	},
-	"default": {
-		"layer": {
-			"preview": "public/images/icons/link-light.svg"
-		}
 	},
 	"initial": {
 		"style": {
