@@ -418,11 +418,11 @@ gen.prototype.updatePositionAccordingToParent_ = function( obj ) {
       top:  parent.style.top,
       left: parent.style.left
     };
-  }
+  };
 
   var position = {
-    top:  self.getElemAbsolutePosition_( obj ).top - parentPosition.top,
-    left: self.getElemAbsolutePosition_( obj ).left - parentPosition.left
+    top:  self.getElemAbsolutePosition_( obj ).top - ( parentPosition.top * 2 ),
+    left: self.getElemAbsolutePosition_( obj ).left - ( parentPosition.left * 2)
   };
 
   self.updateStyle_(obj, {
@@ -438,6 +438,8 @@ gen.prototype.getElemAbsolutePosition_ = function( obj ) {
     top:  obj.dom.elem.offset().top - self.dom.adContent.offset().top,
     left: obj.dom.elem.offset().left - self.dom.adContent.offset().left
   };
+
+  console.log(obj.dom.elem.offset().left);
   return position;
 };
 

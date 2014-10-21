@@ -9,6 +9,9 @@ gen.prototype.initLayersSortable_ = function() {
     tolerance: 'pointer',
     placeholder: 'layer__placeholder',
     doNotClear: true,
+    isAllowed: function(item, parent) {
+      return self.verifyIfParentCanReceiveChildren_( item, parent );
+    },
     stop: function(event, ui) {
       var id = ui.item.data( 'id' );
       var obj = self.getObjById_( id );
@@ -16,10 +19,49 @@ gen.prototype.initLayersSortable_ = function() {
       self.setFocus_( obj );
       self.updateLayer_( obj );
       self.updateLayersZindex_( self.dom.layers );
-    },
-    isAllowed: function(item, parent) {
-      return self.verifyIfParentCanReceiveChildren_( item, parent );
     }
+  });
+};
+
+/*=== Set Layer HTML ==========================================*/
+gen.prototype.setLayerHtml_ = function( obj ) {
+  var self = this;
+  var html = Mustache.render( self.app.templates.layer, obj );
+  var parent = obj.meta.parent === null ? self.dom.layers : self.getObjById_( obj.meta.parent );
+  if( obj.meta.parent !== null ) {
+    parent = parent.dom.layer.children('ol');
+  }
+
+  var z = 0;
+  if( parent.children('li').length ) {
+    var reference = parent.children('li').eq(0);
+    var referenceObj = self.getObjById_( reference.data('id') );
+    z = parseInt( referenceObj.style.zIndex ) + 1;
+  }
+
+  self.updateStyle_( obj, {
+    zIndex: z
+  });
+
+  parent.prepend( html );
+
+  obj.dom.layer = parent.find('[data-id="' + obj.meta.id + '"]');
+  self.updateLayerPreview_( obj );
+  self.dom.layers.sortable( 'refresh' );
+};
+
+gen.prototype.updateLayerPreview_ = function( obj ) {
+  var self = this;
+  var preview = null;
+
+  if( obj.settings.layer.preview ) {
+    preview = self.customLayerPreview_( obj );
+  } else if( obj.style.backgroundImage ) {
+    preview = obj.style.backgroundImage;
+  }
+
+  obj.dom.layer.find('.layer__preview').css({
+    'background-image': 'url("' + preview + '"), url("' + self.path.images + 'ad-window-tile.png")'
   });
 };
 
@@ -84,20 +126,21 @@ gen.prototype.updateLayerParent_ = function( obj, parent ) {
 	var self = this;
 
 	self.removeObjByIdFromArray_( obj.meta.id );
+
 	if( parent === null ) {
 		parent = self.ad;
 		self.dom.adContent.append( obj.dom.elem );
 	} else {
-
 		if( parent.settings.container ) {
 			parent.dom.elem.find( '.' + parent.settings.container ).append( obj.dom.elem );
 		} else {
 			parent.dom.elem.append( obj.dom.elem );
 		}
-		
 	}
-    parent.elems.push( obj );
-    self.updatePositionAccordingToParent_( obj );
+
+  console.log(' mis dans un nouvel elem ');
+  parent.elems.push( obj );
+  self.updatePositionAccordingToParent_( obj );
 };
 
 /*=== Update Layers Z-Index =====================================*/
@@ -134,34 +177,6 @@ gen.prototype.updateLayersZindex_ = function( ol ) {
   }
 };
 
-/*=== Set Layer HTML ==========================================*/
-gen.prototype.setLayerHtml_ = function( obj ) {
-  var self = this;
-  var html = Mustache.render( self.app.templates.layer, obj );
-  var parent = obj.meta.parent === null ? self.dom.layers : self.getObjById_( obj.meta.parent );
-  if( obj.meta.parent !== null ) {
-    parent = parent.dom.layer.children('ol');
-  }
-
-  var z = 0;
-  if( parent.children('li').length ) {
-    var reference = parent.children('li').eq(0);
-    var referenceObj = self.getObjById_( reference.data('id') );
-    z = parseInt( referenceObj.style.zIndex ) + 1;
-  }
-
-  self.updateStyle_( obj, {
-    zIndex: z
-  });
-
-  parent.prepend( html );
-
-  obj.dom.layer = parent.find('[data-id="' + obj.meta.id + '"]');
-  self.updateLayerPreview_( obj );
-  self.dom.layers.sortable( 'refresh' );
-};
-
-
 /*=== Update Layer Focus =====================================*/
 gen.prototype.updateLayerFocus_ = function( layer ) {
   var self = this;
@@ -169,21 +184,6 @@ gen.prototype.updateLayerFocus_ = function( layer ) {
   var obj = self.getObjById_( id );
 
   self.setFocus_( obj );
-};
-
-gen.prototype.updateLayerPreview_ = function( obj ) {
-  var self = this;
-  var preview = null;
-
-  if( obj.settings.layer.preview ) {
-    preview = self.customLayerPreview_( obj );
-  } else if( obj.style.backgroundImage ) {
-    preview = obj.style.backgroundImage;
-  }
-
-  obj.dom.layer.find('.layer__preview').css({
-    'background-image': 'url("' + preview + '"), url("' + self.path.images + 'ad-window-tile.png")'
-  });
 };
 
 gen.prototype.customLayerPreview_ = function( obj ) {
