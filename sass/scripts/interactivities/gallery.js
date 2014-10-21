@@ -11,14 +11,35 @@ gen.prototype.updateGallery_ = function( obj ) {
 gen.prototype.updateGalleryObj_ = function( gallery ) {
   var self = this;
 
-  console.log('teer', gallery.elems[0]);
-
   gallery.ImagesNbr = gallery.elems.length;
   gallery.reference = gallery.elems[0];
 
   if( gallery.exist.pager ) {
     gallery.ImagesNbr--;
     gallery.reference = gallery.elems[1];
+  }
+};
+
+/*=== Update Gallery Pager ==============================================*/
+gen.prototype.updateGalleryPager_ = function( obj ) {
+  var self = this;
+  var gallery = obj ? obj : self.app.focusedObj;
+
+  if( !gallery.exist.pager && gallery.ImagesNbr >= 2 ) {
+    self.createGalleryPager_( gallery );
+    gallery.exist.pager = true;
+  }
+
+  if( gallery.exist.pager ) {
+    var pager = self.getObjById_( gallery.meta.id + '-pager', gallery.elems );
+    pager.bullets = gallery.ImagesNbr;
+
+    if( pager.bullets <= 1 ) {
+      gallery.exist.pager = false;
+      self.erase_( pager );
+    } else {
+      self.updateGalleryPagerTheme_( pager );
+    }
   }
 };
 
@@ -64,29 +85,6 @@ gen.prototype.updateGalleryChildren_ = function( gallery ) {
       }
     }
   }, 0)
-};
-
-/*=== Update Gallery Pager ==============================================*/
-gen.prototype.updateGalleryPager_ = function( obj ) {
-  var self = this;
-  var gallery = obj ? obj : self.app.focusedObj;
-
-  if( !gallery.exist.pager && gallery.ImagesNbr >= 2 ) {
-    self.createGalleryPager_( gallery );
-    gallery.exist.pager = true;
-  }
-
-  if( gallery.exist.pager ) {
-    var pager = self.getObjById_( gallery.meta.id + '-pager', gallery.elems );
-    pager.bullets = gallery.ImagesNbr;
-
-    if( pager.bullets <= 1 ) {
-      gallery.exist.pager = false;
-      self.erase_( pager );
-    } else {
-      self.updateGalleryPagerTheme_( pager );
-    }
-  }
 };
 
 /*=== Create Gallery Pager ==============================================*/

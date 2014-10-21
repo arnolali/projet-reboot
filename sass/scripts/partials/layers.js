@@ -58,9 +58,9 @@ gen.prototype.updateLayer_ = function( obj ) {
 
   		if( obj.meta.parent !== null) {
   			var functionExitParent = 'update' + capitaliseFirstLetter( parent.meta.type ) + 'ChildrenWhenLeaving_';
-	        if( typeof self[ functionExitParent ] === 'function') {
-	          self[ functionExitParent ]( obj );
-	        }
+        if( typeof self[ functionExitParent ] === 'function') {
+          self[ functionExitParent ]( obj );
+        }
   		}
   		
   		obj.meta.parent = parent.meta.id;
@@ -71,13 +71,12 @@ gen.prototype.updateLayer_ = function( obj ) {
           self[ functionEnterParent ]( parent );
         } 
 	} else { // Change de position, mais reste dans le même élément
-
-		var functionUpdateParentChildren = 'update' + capitaliseFirstLetter( parent.meta.type ) + 'Children_';
-		console.log("Change de position, mais reste dans le même élément", functionUpdateParentChildren);
-        if( typeof self[ functionUpdateParentChildren ] === 'function') {
-          self[ functionUpdateParentChildren ]( parent );
-        } 
-	}
+	    var functionUpdateParentChildren = 'update' + capitaliseFirstLetter( parent.meta.type ) + 'Children_';
+	    console.log("Change de position, mais reste dans le même élément", functionUpdateParentChildren);
+      if( typeof self[ functionUpdateParentChildren ] === 'function') {
+        self[ functionUpdateParentChildren ]( parent );
+      } 
+    }
   }
 };
 

@@ -50,7 +50,7 @@ gen = function(defaultApp, root, defaultAd) {
     $.get( self.path.templates + "partials/erase.mustache", function(r) { self.app.templates.erase = r; } ),
     $.get( self.path.templates + "/options/partials/position.mustache", function(r) { self.app.templates.options.partials.position = r; } ),
     $.get( self.path.templates + "/options/partials/dimensions.mustache", function(r) { self.app.templates.options.partials.dimensions = r; } ),
-    $.get( self.path.templates + "/options/partials/href.mustache", function(r) { self.app.templates.options.partials.href = r; } ),
+    $.get( self.path.templates + "/options/partials/url.mustache", function(r) { self.app.templates.options.partials.url = r; } ),
     $.get( self.path.templates + "/options/partials/theme.mustache", function(r) { self.app.templates.options.partials.theme = r; } ),
     $.get( self.path.templates + "/icons/link.mustache", function(r) { self.app.templates.icons.link = r; } )
   ).then(function() { // Ensuite initialise la page
@@ -90,96 +90,6 @@ gen.prototype.init_ = function() {
   self.initLayersSortable_();
   self.initDragElemOptions_();
   self.initColorInput_();
-};
-
-//=== BIND START =====================================================
-gen.prototype.bindEvents_ = function() {
-  var self = this;
-
-  $(document).on('keydown', function(e) {
-    self.updateKeyPressed_( e );
-  });
-
-  $(document).on('keyup', function() {
-    self.updateKeyPressed_();
-  });
-
-  $(document).on('dragover', function() {
-    clearTimeout(window.timer);
-    self.detectDragOver_( true );
-  });
-
-  $(document).on('dragleave drop', function() {
-    window.timer = setTimeout(function() {
-      self.detectDragOver_( false );
-    }, 200);
-  });
-
-  self.dom.form.on('keypress', function(e) {
-    self.verifyEnter_( e );
-  });
-
-  self.dom.interactivitiesToolbar.on('click', '.js-create-ad-elem', function() {
-    self.createElemByType_( $(this) );
-  });
-
-  self.dom.layers.on('click', '.js-toggle-layer-visibility', function() {
-    self.toggleVisibility_( $(this).closest('.layer') );
-  });
-
-  self.dom.layers.on('click', function() {
-    self.setFocus_();
-  });
-
-  self.dom.layers.on('click', '.layer', function(e) {
-    e.stopImmediatePropagation();
-    self.updateLayerFocus_( $(this) );
-  });
-
-  self.dom.lock.on('click', function(e) {
-    e.stopImmediatePropagation();
-    self.toggleLockElem_();
-  });
-
-  self.dom.opacity.on('change', function() {
-    self.updateElemOpacity_();
-  });
-
-  self.dom.askErase.on('click', function() {
-    self.askErase_();
-  });
-
-  self.dom.form.on('click', '.js-erase', function() {
-    self.erase_();
-  });
-
-  self.dom.colorsFlip.on('click', function() {
-    self.colorsFlip_();
-  });
-
-  self.dom.form.on('click', '.js-close-popup', function() {
-    self.closePopup_( $(this).closest('.popup') );
-  });
-
-  self.dom.adContent.on('change', '.js-dropzone', function() {
-    self.getImgFormInput_( $(this) );
-  });
-
-  self.dom.elemOptions.on('click', '.js-change-theme', function() {
-    self.updateThemeIcon_( $(this) );
-  });
-
-  self.dom.elemOptions.on('change', '.js-update-elem-style', function() {
-    self.updateStyleAccordingToOptionsInput_( $(this) );
-  });
-
-  self.dom.elemOptions.on('change', '.js-update-elem-setting', function() {
-    self.updateElemSetting_( $(this) );
-  });
-
-  self.dom.elemOptions.on('click', '.js-align-elem', function() {
-    self.alignElem_( $(this).data('position') );
-  });
 };
 
 gen.prototype.closePopup_ = function( popup ) {
@@ -235,10 +145,11 @@ gen.prototype.initInteractivitiesRelated_ = function() {
 /*=== Get Interactivity Template ==========================================*/
 gen.prototype.getInteractivityTemplate_ = function( interactivity ) {
   var self = this;
-  $.get( self.path.templates + "interactivities/" + interactivity + ".mustache")
-  .done(function(r) { 
-    self.app.templates[ interactivity ] = r; 
-  });
+    $.get( self.path.templates + "interactivities/" + interactivity + ".mustache")
+    .done(function(r) { 
+      self.app.templates[ interactivity ] = r; 
+    })
+    .error(function(r) {});  
 };
 
 /*=== Get Interactivity Options Template ====================================*/
@@ -248,11 +159,14 @@ gen.prototype.getInteractivityOptionsTemplate_ = function( interactivity ) {
   .done(function(r) { 
     self.app.templates.options[ interactivity ] = r; 
     if( interactivity === 'gallery' ) {
-      $.get( self.path.templates + "options/" + interactivity + "-pager.mustache" ).done(function(r) { 
+      $.get( self.path.templates + "options/" + interactivity + "-pager.mustache" )
+      .done(function(r) { 
         self.app.templates.options[ interactivity + '-pager' ] = r; 
-      });
+      })
+      .error(function(r) {}); 
     }
-  });
+  })
+  .error(function(r) {}); 
 };
 
 /*=== Get Interactivity Settings ==========================================*/
@@ -262,11 +176,14 @@ gen.prototype.getInteractivitySettings_ = function( interactivity ) {
   .done(function(r) { 
     self.app.settings[ interactivity ] = r; 
     if( interactivity === 'gallery' ) {
-      $.getJSON( self.path.settings + interactivity + "-pager.json").done(function(r) { 
+      $.getJSON( self.path.settings + interactivity + "-pager.json")
+      .done(function(r) { 
         self.app.settings[ interactivity + '-pager' ] = r; 
-      });
+      })
+      .error(function(r) {}); 
     }
-  });
+  })
+  .error(function(r) {}); 
 };
 
 /*=== Init Id Per Interactivity ==========================================*/
@@ -454,6 +371,7 @@ gen.prototype.setOptionsHtml_ = function( obj ) {
 
   var html = Mustache.render( self.app.templates.options[ obj.meta.type ], construct, {
     theme: self.app.templates.options.partials.theme,
+    url: self.app.templates.options.partials.url,
     align: self.app.templates.options.partials.align,
     position: self.app.templates.options.partials.position,
     dimensions: self.app.templates.options.partials.dimensions
@@ -626,7 +544,6 @@ gen.prototype.updateStyleAccordingToOptionsInput_ = function( input ) {
 /*=== Update Prop =============================*/
 gen.prototype.updateStyle_ = function( obj, style ) {
   var self = this;
-
   /* Garder ligne/commentaire si dessous pour débugage */
   //console.table( [$.extend( {}, {'objet': obj.meta.name}, style)] );
 
@@ -703,9 +620,16 @@ gen.prototype.updateReadonly_ = function( props, obj ) {
   }
 };
 
+gen.prototype.updateLayerName_ = function( obj, filename ) {
+  var self = this;
+  obj.dom.layer.find('.layer__name').text( obj.meta.name );
+};
+
+//@prepros-append partials/bind.js
 //@prepros-append partials/shortcuts.js
 //@prepros-append partials/layers.js
 //@prepros-append partials/erase.js
+//@prepros-append partials/url.js
 //@prepros-append partials/align.js
 //@prepros-append partials/lock.js
 //@prepros-append partials/opacity.js

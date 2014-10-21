@@ -27,13 +27,12 @@ gen.prototype.erase_ = function( obj ) {
     self.app.focusedObj = null;
     self.setFocus_();
 
-    if( parent && typeof self[ functionName ] === 'function') {
+    if( parent && typeof self[ functionName ] === 'function' ) {
       self[ functionName ]( parent );
     }
   }
 
   self.dom.form.find('.ask-erase').remove();
-  
 };
 
 gen.prototype.updateEraseIcon_ = function() {

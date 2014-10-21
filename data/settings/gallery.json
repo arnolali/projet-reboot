@@ -24,6 +24,9 @@
 		},
 		"elem": {
 			"class": "empty"
+		},
+		"automatic": {
+			"pager": true
 		}
 	}
 }
