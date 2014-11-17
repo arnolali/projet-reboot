@@ -1,12 +1,28 @@
 /*=== Update Gallery ==============================================*/
-gen.prototype.updateGallery_ = function( obj ) {
+gen.prototype.updateGallery_ = function( obj, deleted ) {
   var self = this;
 
-  self.updateGalleryObj_( obj )
+  console.log(deleted);
+  if( deleted ) {
+    self.updateGalleryChildrenDeleted_( obj, deleted );
+  }
+
+  self.updateGalleryObj_( obj );
   self.updateGalleryPager_( obj );
   self.updateGalleryDimensions_( obj );
   self.updateGalleryChildren_( obj );
 };
+
+gen.prototype.updateGalleryChildrenDeleted_ = function( gallery, deleted ) {
+  var self = this;
+  console.log(deleted);
+  if( deleted.meta.type === 'gallery-pager' ) {
+    gallery.exist.pager = false;
+    gallery.auto.pager = false;
+    gallery.canHave.pager = true;
+  }
+};
+
 /*=== Update Gallery Obj ==============================================*/
 gen.prototype.updateGalleryObj_ = function( gallery ) {
   var self = this;
@@ -25,7 +41,7 @@ gen.prototype.updateGalleryPager_ = function( obj ) {
   var self = this;
   var gallery = obj ? obj : self.app.focusedObj;
 
-  if( !gallery.exist.pager && gallery.ImagesNbr >= 2 ) {
+  if( !gallery.exist.pager && gallery.ImagesNbr >= 2 && gallery.auto.pager ) {
     self.createGalleryPager_( gallery );
     gallery.exist.pager = true;
   }
@@ -46,8 +62,6 @@ gen.prototype.updateGalleryPager_ = function( obj ) {
 /*=== Update Gallery Dimensions ==============================================*/
 gen.prototype.updateGalleryDimensions_ = function( gallery ) {
   var self = this;
-
-  console.log( gallery );
 
   setTimeout(function() {
     self.updateStyle_(gallery, {

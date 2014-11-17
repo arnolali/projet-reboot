@@ -28,7 +28,7 @@ gen.prototype.erase_ = function( obj ) {
     self.setFocus_();
 
     if( parent && typeof self[ functionName ] === 'function' ) {
-      self[ functionName ]( parent );
+      self[ functionName ]( parent, obj );
     }
   }
 
